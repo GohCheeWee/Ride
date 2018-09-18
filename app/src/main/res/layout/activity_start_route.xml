@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ride.comfirm.startRoute.StartRouteActivity">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"/>
+
+    <fragment
+        android:id="@+id/activity_start_route_google_map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your driver has arrived"
+            android:textColor="@color/transparent_black"
+            android:layout_alignParentTop="true"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:id="@+id/activity_start_route_status"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_start_route_car_plate"
+            android:layout_below="@id/activity_start_route_status"
+            android:text="JQS 7487"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:background="@drawable/activity_start_route_custom_text_view"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_start_route_car_model"
+            android:layout_below="@id/activity_start_route_car_plate"
+            android:text="Produa Axia"
+            android:textColor="@color/black"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/activity_start_route_car_model"
+            android:background="@color/disable_color"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_height="?actionBarSize">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:id="@+id/activity_start_route_driver_icon"
+                android:src="@drawable/driver_found_dialog_driver_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text=""
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:layout_alignParentTop="true"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:id="@+id/acitvity_start_route_driver_name"
+                android:layout_toEndOf="@id/activity_start_route_driver_icon"
+                android:gravity="center"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/activity_start_route_call_icon"
+                android:id="@+id/activity_start_route_call_icon"
+                android:padding="3dp"
+                android:layout_toStartOf="@id/activity_start_route_message_icon"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="3dp"
+                android:src="@drawable/activity_start_route_message_icon"
+                android:id="@+id/activity_start_route_message_icon"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

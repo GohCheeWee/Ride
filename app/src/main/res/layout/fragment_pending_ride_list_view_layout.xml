@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/activity_main_custom_linear_layout_with_shadow"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="7dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_pending_ride_label_waiting_for_driver"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:id="@+id/fragment_pending_ride_list_view_status"
+            android:layout_weight="2.5"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="RM84.90"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:gravity="end"
+            android:id="@+id/fragment_pending_ride_list_view_fare"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:contentDescription="@string/fragment_pending_ride_label_start"
+                    android:src="@drawable/activity_main_startpoint"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="29, Jalan Tasek 51"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"
+                    android:textSize="16sp"
+                    android:id="@+id/fragment_pending_ride_list_view_pickup_point"
+                    android:fontFamily="sans-serif-condensed"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                   />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:padding="2dp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:contentDescription="@string/fragment_pending_ride_label_start"
+                    android:src="@drawable/activity_main_endpoint"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="29, Jalan Tasek 51"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:id="@+id/fragment_pending_ride_list_view_dropoff"
+                    android:fontFamily="sans-serif-condensed"
+                    android:layout_marginStart="5dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:id="@+id/fragment_pending_ride_list_view_date"
+                android:text="01 Jul"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:id="@+id/fragment_pending_ride_list_view_time"
+                android:text="09:00 AM"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

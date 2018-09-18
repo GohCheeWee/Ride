@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">Ride</string>
+    <!--main activity-->
+    <string name="activity_login_hint_email">Email</string>
+    <string name="activity_login_hint_password">Password</string>
+    <string name="activity_login_sign_in_button">Sign In</string>
+    <string name="activity_login_label_before_register">Do not have an account? </string>
+    <string name="activity_login_label_register"><b>Sign up Now</b></string>
+    <string name="activity_login_label_forgot_password"><b>Forgot Password?</b></string>
+
+    <!--register activity-->
+    <string name="activity_register_editext_username">Username</string>
+    <string name="activity_register_editext_email">Email</string>
+    <string name="activity_register_editext_password">Password</string>
+    <string name="activity_register_editext_mobile">Mobile</string>
+    <string name="activity_register_editext_phone_prefix">+60</string>
+    <string name="activity_register_editext_male">Male</string>
+    <string name="activity_register_editext_female">Female</string>
+    <string name="activity_register_sign_up_button">Sign Up</string>
+
+    <!--something missing dialog-->
+    <string name="something_missing_dialog_text">Uhh...Something is missing...</string>
+    <string name="something_missing_dialog_okay">Okay</string>
+    <string name="acitivty_main_nav_header_image_view">profile icon</string>
+
+    <!--navigation drawer-->
+    <string name="activity_main_open">Open</string>
+    <string name="activity_main_close">Close</string>
+    <string name="activity_main_menu_1">RidePay</string>
+    <string name="activity_main_menu_2">Trip</string>
+    <string name="activity_main_menu_3">Emergency</string>
+    <string name="activity_main_menu_4">Help Centre</string>
+    <string name="activity_main_menu_5">Drive with Ride</string>
+
+    <!--actionbar-->
+    <string name="actionbar" />
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Google map-->
+    <string name="google_maps_key">AIzaSyDXPSLAOzrObTUv0WrSQk5mCEKFIO2pc08</string>
+    <string name="activity_main_pick_up">Where are you now?</string>
+    <string name="activity_main_drop_off">Where are you going?</string>
+    <string name="activty_main_book_button">CHOOSE YOUR DROP-OFF</string>
+    <string name="activity_main_remark">Add some note to driver</string>
+    <string name="activity_main_person">1</string>
+    <string name="activity_main_payment">Cash</string>
+    <string name="activity_main_time">Now</string>
+    <string name="activity_main_book">BOOK NOW</string>
+    <string name="activity_main_address_not_found">Address not found</string>
+    <string name="activity_main_address_found">Address found</string>
+    <string name="activity_main_invalid_position">Invalid Position</string>
+    <string name="activity_main_service_not_found">Service not found</string>
+    <string name="activity_main_label_car">RidePool</string>
+    <string name="activity_main_price">RM 20</string>
+    <string name="activity_main_label_note">Note</string>
+    <string name="activity_main_label_apply">APPLY</string>
+    <string name="activity_main_hint_note">Write your note here...</string>
+    <!--update profile dialog-->
+    <string name="edit_profile_dialog_name">Chee Wee</string>
+    <string name="edit_profile_dialog_label_review">review</string>
+    <string name="edit_profile_dialog_label_completed_route">Completed Trip</string>
+    <string name="edit_profile_dialog_label_save">Save</string>
+    <string name="edit_profile_dialog_label_logout">LOGOUT</string>
+    <string name="edit_profile_dialog_title">Profile</string>
+    <!--profile upload photo dialog-->
+    <string name="edit_profile_upload_photo_dialog_title">Upload a Photo</string>
+    <string name="edit_profile_upload_photo_dialog_photo">Take a New Photo</string>
+    <string name="edit_profile_upload_photo_dialog_gallery">Choose From Gallery</string>
+    <!--Invalid time dialog-->
+    <string name="activity_main_invalid_time_dialog_title">Warning</string>
+    <string name="activity_main_invalid_time_dialog_message">Sorry, route must be at least 10 minutes from now</string>
+    <string name="activity_main_invalid_time_dialog_button">ALRIGHT</string>
+    <string name="activity_profile_rating">Rating</string>
+    <!--pending ride-->
+    <string name="fragment_confirm_ride_label_no_upcoming_trip">No upcoming trips</string>
+    <string name="fragment_confirm_ride_button">Create route</string>
+    <string name="fragment_pending_ride_label_no_pending">No pending trips</string>
+    <string name="fragment_pending_ride_label_no_history">No completed trips</string>
+    <string name="fragment_pending_ride_label_waiting_for_driver">Waiting for driver to accept</string>
+    <string name="fragment_pending_ride_label_start" />
+
+    <!--ride activity-->
+    <string name="fragment_pending_trip_title">Trip</string>
+
+    <!--pending ride detail-->
+    <string name="fragment_pending_ride_detail_pick_up_point">Pick up point</string>
+    <string name="fragment_pending_ride_detail_drop_off_point">Drop off point</string>
+    <string name="fragment_pending_ride_detail_payment_method">Pay by</string>
+    <string name="fragment_pending_ride_detail_fare">Fare</string>
+    <string name="fragment_pending_ride_detail_time">Time</string>
+    <string name="fragment_pending_ride_detail_hint_note">Note</string>
+    <string name="fragment_pending_ride_detail_note">None</string>
+    <string name="fragment_pending_ride_detail_title">Ride Detail</string>
+    <!--pending ride detail delete dialog-->
+    <string name="fragment_pending_ride_detail_delete_dialog_message1">Are you sure to delete this trip?</string>
+    <string name="fragment_pending_ride_detail_delete_dialog_message2">This cannot be undone.</string>
+    <string name="fragment_pending_ride_detail_delete_dialog_confirm">Confirm</string>
+    <string name="fragment_pending_ride_detail_delete_dialog_cancel">Cancel</string>
+
+    <string name="fragment_pending_ride_detail_delete">Delete</string>
+    <string name="fragment_pending_ride_detail_edit">Edit</string>
+
+    <!--driver found dialog-->
+    <string name="driver_found_dialog" />
+    <string name="driver_found_dialog_confirm_button">Confirm</string>
+    <string name="driver_found_dialog_label">Yay, We found you a driver!</string>
+
+    <!--match ride Activity-->
+    <string name="match_ride_activity" />
+    <string name="match_ride_activity_label_status">Status:</string>
+    <string name="match_ride_activity_status_coming">Your Driver Is On The Way Now!</string>
+    <string name="match_ride_activity_status_arrived">Your driver has arrived!</string>
+    <string name="match_ride_activity_status_not_start">Pending</string>
+    <string name="match_ride_activity_status_destination">Your Driver Is On The To Your Destination</string>
+    <string name="match_ride_activity_button">Track</string>
+
+    <!--Start Route Activity-->
+    <string name="start_route_activity">Tracking</string>
+    <!--comeplte route dialog-->
+    <string name="completed_route_dialog_title">Congratulations</string>
+    <string name="completed_route_dialog_label">Yay! You have finished your journey successful!</string>
+    <string name="completed_route_dialog_button">Okay</string>
+
+</resources>

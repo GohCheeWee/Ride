@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:id="@+id/actionbar"
+        android:layout_height="?actionBarSize"/>
+
+    <com.jby.ride.others.CustomScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@id/actionbar"
+        android:id="@+id/scrollview"
+        android:layout_marginBottom="?actionBarSize"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                android:layout_height="70dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:src="@drawable/activity_profile_user_icon"
+                    android:id="@+id/fragment_pending_ride_detail_driver_profile"
+                    android:layout_height="50dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="@string/fragment_pending_ride_label_waiting_for_driver"
+                    android:gravity="start|center"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="15sp"
+                    android:id="@+id/fragment_pending_ride_detail_status"
+                    android:textStyle="bold"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <fragment
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:id="@+id/fragment_pending_ride_detail_map"
+                android:layout_height="180dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@drawable/activity_main_startpoint"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:layout_height="match_parent"
+                        />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <TextView
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:id="@+id/fragment_pending_ride_detail_pick_up"
+                    android:hint="@string/fragment_pending_ride_detail_pick_up_point"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:padding="5dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@drawable/activity_main_endpoint"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:layout_height="match_parent"
+                        />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <TextView
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:text=""
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:enabled="false"
+                    android:id="@+id/fragment_pending_ride_detail_drop_off"
+                    android:hint="@string/fragment_pending_ride_detail_drop_off_point"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:padding="5dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:src="@drawable/fragment_pending_ride_detail_time" />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <EditText
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:text=""
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:enabled="false"
+                    android:id="@+id/fragment_pending_ride_detail_time"
+                    android:hint="@string/fragment_pending_ride_detail_time"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@drawable/fragment_pending_ride_detail_fare"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:layout_height="match_parent"
+                        />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <EditText
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:text=""
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:enabled="false"
+                    android:id="@+id/fragment_pending_ride_detail_fare"
+                    android:hint="@string/fragment_pending_ride_detail_fare"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@drawable/fragment_pending_ride_detail_payment_method"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:layout_height="match_parent"
+                        />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <EditText
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:text=""
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:enabled="false"
+                    android:id="@+id/fragment_pending_ride_detail_payment_method"
+                    android:hint="@string/fragment_pending_ride_detail_payment_method"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:maxLines="1"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <com.jby.ride.others.SquareHeightLinearLayout
+                    android:layout_width="match_parent"
+                    android:padding="17dp"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:src="@drawable/fragment_pending_ride_detail_note_icon"
+                        android:contentDescription="@string/edit_profile_dialog_name"
+                        android:layout_height="match_parent"
+                        />
+
+                </com.jby.ride.others.SquareHeightLinearLayout>
+
+                <EditText
+                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:layout_width="match_parent"
+                    android:inputType="text"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:enabled="false"
+                    android:id="@+id/fragment_pending_ride_detail_note"
+                    android:hint="@string/fragment_pending_ride_detail_note"
+                    android:gravity="center_vertical"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.jby.ride.others.CustomScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@color/white"
+        android:layout_height="?actionBarSize">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/fragment_pending_ride_detail_edit"
+            android:textColor="@color/red"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            android:id="@+id/fragment_pending_ride_detail_edit"
+            android:background="@drawable/fragment_pending_ride_detail_custom_button"
+            android:layout_weight="1"/>
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/activity_login_custom_button"
+            android:text="@string/fragment_pending_ride_detail_delete"
+            android:textColor="@color/white"
+            android:id="@+id/fragment_pending_ride_detail_delete"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/activity_main_custom_linear_layout_with_shadow"
+            android:padding="5dp"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/white"
+                android:layout_height="?actionBarSize">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:contentDescription="@string/activity_main_pick_up"
+                    android:padding="13dp"
+                    android:src="@drawable/activity_main_startpoint"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:id="@+id/activity_main_pick_up"
+                    android:padding="5dp"
+                    android:gravity="center_vertical"
+                    android:hint="@string/activity_main_pick_up"
+                    android:textSize="14sp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColorHint="@color/grey"
+                    android:background="@drawable/activity_mian_custom_edit_text"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="30dp"
+                android:background="#30000000"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="?actionBarSize">
+
+                <ImageView
+                    android:contentDescription="@string/activity_main_pick_up"
+                    android:layout_width="45dp"
+                    android:src="@drawable/activity_main_endpoint"
+                    android:padding="13dp"
+                    android:id="@+id/activity_main_drop_off_icon"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:id="@+id/activity_main_drop_off"
+                    android:hint="@string/activity_main_drop_off"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:background="@drawable/activity_mian_custom_edit_text"
+                    android:padding="5dp"
+                    android:textSize="14sp"
+                    android:textColorHint="@color/grey"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:id="@+id/activity_main_advance_setting"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:id="@+id/activity_main_payment"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/activity_main_payment"
+                        android:contentDescription="@string/activity_main_payment"
+                        android:padding="13dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:id="@+id/activity_main_payment_text_view"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:textColor="@color/black"
+                        android:text="@string/activity_main_payment"/>
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#30000000"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:id="@+id/activity_main_date"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/activity_main_date"
+                        android:contentDescription="@string/activity_main_time"
+                        android:padding="13dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:textColor="@color/black"
+                        android:id="@+id/activity_main_date_text_view"
+                        android:hint="@string/activity_main_time"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#30000000"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:id="@+id/activity_main_time"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/activity_main_time"
+                        android:contentDescription="@string/activity_main_payment"
+                        android:padding="13dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:textColor="@color/black"
+                        android:id="@+id/activity_main_time_text_view"
+                        android:hint="@string/activity_main_time"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#30000000"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/activity_main_remark"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/activity_main_remark"
+                    android:contentDescription="@string/activity_main_time"
+                    android:padding="13dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="start|center_vertical"
+                    android:textSize="14sp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColor="@color/grey"
+                    android:padding="5dp"
+                    android:id="@+id/activity_main_remark_text_view"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:hint="@string/activity_main_remark"
+                    />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/transparent"
+                android:layout_height="50dp">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:orientation="vertical"
+                    android:layout_alignParentEnd="true"
+                    android:background="@color/transparent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center|bottom"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:id="@+id/activity_main_estimate_distance"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center|top"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:maxLines="1"
+                        android:id="@+id/activity_main_estimate_duration"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+

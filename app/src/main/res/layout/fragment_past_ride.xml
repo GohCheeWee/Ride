@@ -1,43 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ride.comfirm.ConfirmRideFragment">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_past_ride_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"
+        android:layout_centerInParent="true"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_past_ride_swipe_layout">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_height="match_parent">
+            android:padding="5dp"
+            android:background="@color/background_color"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_centerInParent="true"
-                android:layout_above="@id/fragment_pending_ride_label_no_history"
-                android:contentDescription="@string/fragment_pending_ride_label_no_history"
-                android:padding="30dp"
-                android:src="@drawable/fragment_past_ride_time_icon"/>
-
-            <TextView
-                android:layout_width="wrap_content"
+            <com.jby.ride.others.CustomListView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:textSize="25sp"
-                android:layout_marginBottom="200dp"
-                android:layout_centerInParent="true"
-                android:fontFamily="sans-serif-condensed"
-                android:id="@+id/fragment_pending_ride_label_no_history"
-                android:text="@string/fragment_pending_ride_label_no_history"/>
+                android:layout_marginTop="5dp"
+                android:divider="@color/background_color"
+                android:dividerHeight="5dp"
+                android:scrollbars="none"
+                android:visibility="gone"
+                android:id="@+id/fragment_past_ride_list_view"/>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:visibility="gone"
+                android:id="@+id/fragment_past_ride_not_found_layout"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerInParent="true"
+                    android:layout_above="@id/fragment_pending_ride_label_no_history"
+                    android:contentDescription="@string/fragment_pending_ride_label_no_history"
+                    android:padding="30dp"
+                    android:src="@drawable/fragment_past_ride_time_icon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="25sp"
+                    android:layout_marginBottom="200dp"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:id="@+id/fragment_pending_ride_label_no_history"
+                    android:text="@string/fragment_pending_ride_label_no_history"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+</RelativeLayout>

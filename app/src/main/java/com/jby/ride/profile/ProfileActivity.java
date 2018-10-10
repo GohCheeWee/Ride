@@ -1,8 +1,12 @@
 package com.jby.ride.profile;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -15,25 +19,37 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.jby.ride.BuildConfig;
 import com.jby.ride.R;
 import com.jby.ride.home.MainActivity;
-import com.jby.ride.others.SquareHeightLinearLayout;
+import com.jby.ride.others.dialog.DriverFoundDialog;
+import com.jby.ride.others.dialog.DriverIsOtwDialog;
+import com.jby.ride.others.dialog.RatingDialog;
+import com.jby.ride.ride.RideActivity;
+import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
 import com.jby.ride.sharePreference.SharedPreferenceManager;
+import com.jgabrielfreitas.core.BlurImageView;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -51,23 +67,25 @@ import java.util.concurrent.TimeoutException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.jby.ride.home.MainActivity.LOGOUT_REQUEST;
+import static com.jby.ride.others.MyFireBaseMessagingService.NotificationBroadCast;
 import static com.theartofdev.edmodo.cropper.CropImageView.CropShape.OVAL;
 import static com.theartofdev.edmodo.cropper.CropImageView.Guidelines.ON_TOUCH;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, UploadImageDialog.UploadImageDialogListener {
-    //    actionBar
-    private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon, actionBarLogout;
-    private TextView actionBarTitle;
-
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, UploadImageDialog.UploadImageDialogListener,
+        DriverFoundDialog.DriverFoundDialogCallBack, RatingDialog.RatingDialogCallBack, DriverIsOtwDialog.DriverIsOtwDialogCallBack,
+        View.OnFocusChangeListener, GoogleApiClient.OnConnectionFailedListener {
     //    dialog
     private CircleImageView editProfileDialogPicture;
-    private ImageView editProfileGender;
-    private TextView editProfileDialogLabelUsername, editProfileDialogRating, editProfileDialogReview;
-    private TextView editProfileDialogLabelCancellation;
-    private EditText editTextProfileDialogUsername, editTextProfileDialogMobile, editTextProfileDialogEmail;
-    private Button editTextProfileDialogSaveButton;
+    private BlurImageView editProfileBackgroundImage;
+    private ImageView editProfileBackButton, editProfileClearMobileButton, editProfileLogOutButton;
+    private TextView editProfileGenderMale, editProfileGenderFemale;
+    private TextView editProfileNumCompleteRide;
+    private TextView editProfileDialogLabelUsername, editProfileDialogEditProfileButton;
+    private EditText editTextProfileDialogMobile, editTextProfileDialogEmail;
     private LinearLayout editTextProfileMainLayout;
-
+    private String gender = null;
+    private boolean isUpdate = true;
 //    path
     public static String prefix = "http://188.166.186.198/~cheewee/ride/frontend/user/profile/profile_picture/";
 
@@ -85,6 +103,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private String newPhotoUrl;
     private Uri photoUri, croppedUrl;
     private String imageCode = null;
+//    google sign purpose
+    private GoogleApiClient mGoogleApiClient;
 
     //    dialog
     DialogFragment dialogFragment;
@@ -102,67 +122,92 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void objectInitialize() {
-        actionBarMenuIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_menu);
-        actionBarCloseIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_close);
-        actionBarLogout = (SquareHeightLinearLayout)findViewById(R.id.actionbar_logout);
-        actionBarTitle = (TextView)findViewById(R.id.actionBar_title);
+        editProfileDialogEditProfileButton = findViewById(R.id.activity_profile_edit_profile_button);
 
         editProfileDialogPicture = (CircleImageView) findViewById(R.id.edit_profile_dialog_profile_picture);
-        editProfileGender = (ImageView) findViewById(R.id.activity_profile_gender_icon);
-
+        editProfileBackButton = findViewById(R.id.activity_profile_cancel_button);
+        editProfileLogOutButton = findViewById(R.id.activity_profile_log_out_button);
+        editProfileBackgroundImage = findViewById(R.id.edit_profile_dialog_background_picture);
         editProfileDialogLabelUsername = (TextView) findViewById(R.id.edit_profile_dialog_profile_username);
-        editProfileDialogRating = (TextView) findViewById(R.id.edit_profile_dialog_profile_rating);
-        editProfileDialogReview = (TextView) findViewById(R.id.edit_profile_dialog_profile_review);
-        editProfileDialogLabelCancellation = (TextView) findViewById(R.id.edit_profile_dialog_profile_cancellation);
 
-        editTextProfileDialogUsername = (EditText) findViewById(R.id.edit_profile_dialog_profile_edit_text_username);
         editTextProfileDialogMobile = (EditText) findViewById(R.id.edit_profile_dialog_profile_edit_text_mobile);
+        editProfileClearMobileButton = findViewById(R.id.activity_profile_clear_phone_button);
         editTextProfileDialogEmail = (EditText) findViewById(R.id.edit_profile_dialog_profile_edit_text_email);
+        editProfileGenderMale = findViewById(R.id.activity_profile_gender_male);
+        editProfileGenderFemale = findViewById(R.id.activity_profile_gender_female);
+        editProfileNumCompleteRide = findViewById(R.id.edit_profile_dialog_profile_num_complete_ride);
 
         editTextProfileMainLayout = (LinearLayout)findViewById(R.id.activity_profile_main_layout);
 
-        editTextProfileDialogSaveButton = (Button) findViewById(R.id.edit_profile_dialog_save_button);
         fm = getSupportFragmentManager();
         handler = new Handler();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
     }
 
     private void objectSetting() {
-//        actionBar
-        actionBarTitle.setText(R.string.edit_profile_dialog_title);
-        actionBarMenuIcon.setVisibility(View.GONE);
-        actionBarCloseIcon.setVisibility(View.VISIBLE);
-        actionBarLogout.setVisibility(View.VISIBLE);
-
-        actionBarCloseIcon.setOnClickListener(this);
-        actionBarLogout.setOnClickListener(this);
-
+        if(getIntent().getExtras() != null){
+            boolean requestUpdate = getIntent().getBooleanExtra("requestUpdate", false);
+            if(requestUpdate){
+                //for handle on back press purpose
+                isUpdate = false;
+                showSnackBar("Please update your profile");
+            }
+        }
+        editProfileBackButton.setOnClickListener(this);
         editProfileDialogPicture.setOnClickListener(this);
-        editTextProfileDialogSaveButton.setOnClickListener(this);
-
-        getUserDetail();
+        editProfileDialogEditProfileButton.setOnClickListener(this);
+        editProfileLogOutButton.setOnClickListener(this);
+        editProfileGenderMale.setOnClickListener(this);
+        editProfileGenderFemale.setOnClickListener(this);
+        editProfileClearMobileButton.setOnClickListener(this);
+        editProfileDialogLabelUsername.setOnFocusChangeListener(this);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getUserDetail();
+            }
+        },200);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.actionbar_close:
+            case R.id.activity_profile_cancel_button:
                 onBackPressed();
                 break;
-            case R.id.actionbar_logout:
-                requestCode = MainActivity.LOGOUT_REQUEST;
-                onBackPressed();
+            case R.id.activity_profile_log_out_button:
+                logOutSetting();
                 break;
             case R.id.edit_profile_dialog_profile_picture:
                 dialogFragment = new UploadImageDialog();
                 dialogFragment.show(fm, "");
                 break;
-            case R.id.edit_profile_dialog_save_button:
+            case R.id.activity_profile_edit_profile_button:
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        saveProfile();
+                        checkingInput();
                     }
                 },200);
+                break;
+            case R.id.activity_profile_gender_male:
+                gender = "Male";
+                genderSetting(gender);
+                break;
+            case R.id.activity_profile_gender_female:
+                gender = "Female";
+                genderSetting(gender);
+                break;
+            case R.id.activity_profile_clear_phone_button:
+                editTextProfileDialogMobile.setText("");
                 break;
         }
     }
@@ -193,7 +238,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         String gender = jsonObjectLoginResponse.getJSONObject("value").getString("gender");
                         String phone = jsonObjectLoginResponse.getJSONObject("value").getString("phone");
                         String profile_picture = jsonObjectLoginResponse.getJSONObject("value").getString("profile_picture");
-                        setUpUserDetail(username, email, gender, phone, profile_picture);
+                        String completeRide = jsonObjectLoginResponse.getString("num_complete_ride");
+                        setUpUserDetail(username, email, gender, phone, profile_picture, completeRide);
 
                     }
                     else if(jsonObjectLoginResponse.getString("status").equals("2")){
@@ -220,29 +266,45 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void setUpUserDetail(String username, String email, String gender, String phone, String profile_picture) {
+    private void setUpUserDetail(String username, String email, String gender, String phone, String profile_picture, String completeRide) {
         editProfileDialogLabelUsername.setText(username);
-        editTextProfileDialogUsername.setText(username);
 
         editTextProfileDialogEmail.setText(email);
         editTextProfileDialogMobile.setText(phone);
-
+        editProfileNumCompleteRide.setText(completeRide);
         if(profile_picture != null){
-            profile_picture = prefix + profile_picture;
+            if(!profile_picture.substring(0, 8).equals("https://"))
+                profile_picture = prefix + profile_picture;
 
             Picasso.get()
                     .load(profile_picture)
                     .error(R.drawable.loading_gif)
                     .into(editProfileDialogPicture);
+
+            Picasso.get()
+                    .load(profile_picture)
+                    .error(R.drawable.loading_gif)
+                    .into(editProfileBackgroundImage);
+
+            editProfileBackgroundImage.setBlur(5);
         }
 
-        if(gender.equals("Male"))
-            editProfileGender.setImageDrawable(getResources().getDrawable(R.drawable.activity_profile_male_icon));
-        else
-            editProfileGender.setImageDrawable(getResources().getDrawable(R.drawable.activity_profile_female_icon));
-
+        this.gender = gender;
+        genderSetting(gender);
     }
 
+    private void genderSetting(String gender){
+        if(gender.equals("Male")){
+            editProfileGenderMale.setTextColor(getResources().getColor(R.color.blue));
+            editProfileGenderFemale.setTextColor(getResources().getColor(R.color.disable_color));
+        }
+        else{
+            editProfileGenderFemale.setTextColor(getResources().getColor(R.color.red));
+            editProfileGenderMale.setTextColor(getResources().getColor(R.color.disable_color));
+        }
+    }
+
+/*--------------------------------------------------------------camera and gellery setup purpose----------------------------------------------*/
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_READ_PERMISSION_REQUEST_CODE
@@ -400,16 +462,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 .setActivityMenuIconColor(R.color.red)
                 .start(this);
     }
-
-    private void saveProfile(){
-        String username = editTextProfileDialogUsername.getText().toString();
+    private void checkingInput(){
+        String username = editProfileDialogLabelUsername.getText().toString();
         String phone = editTextProfileDialogMobile.getText().toString();
+        if(!username.equals("") && !phone.equals("") && gender != null)
+            saveProfile(username, phone);
+        else
+            showSnackBar("Sorry, every field above is require :)");
+    }
+    private void saveProfile(String username, String phone){
         String userID = SharedPreferenceManager.getUserID(this);
 
         apiDataObjectArrayList = new ArrayList<>();
         apiDataObjectArrayList.add(new ApiDataObject("user_id", userID));
         apiDataObjectArrayList.add(new ApiDataObject("username", username));
         apiDataObjectArrayList.add(new ApiDataObject("phone", phone));
+        apiDataObjectArrayList.add(new ApiDataObject("gender", gender));
 
         if(imageCode != null){
             String timeStamp = String.valueOf(android.text.format.DateFormat.format("yyyyMMMdd_HHmmss", new java.util.Date()));
@@ -435,8 +503,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                 if (jsonObjectLoginResponse != null) {
                     if(jsonObjectLoginResponse.getString("status").equals("1")){
+                        isUpdate = true;
                         requestCode = MainActivity.UPDATE_PROFILE_REQUEST;
-                        showSnackBar();
+                        showSnackBar("Update Successfully");
                     }
                     else if(jsonObjectLoginResponse.getString("status").equals("2")){
                         Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
@@ -462,9 +531,96 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    //    snackBar setting
-    private void showSnackBar(){
-        final Snackbar snackbar = Snackbar.make(editTextProfileMainLayout, "Updated Successful", Snackbar.LENGTH_SHORT);
+    @Override
+    public void onBackPressed() {
+        String phone = editTextProfileDialogMobile.getText().toString().trim();
+        if(gender != null && !phone.equals("") && isUpdate){
+            Intent intent = new Intent();
+            setResult(requestCode, intent);
+            super.onBackPressed();
+        }
+        else
+            showSnackBar("Please update your profile");
+    }
+/*-------------------------------------------------------------when ride is accepted by driver-----------------------------------------------------*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter(NotificationBroadCast));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            String matchRideId;
+            switch(id){
+                case "3":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutRatingDialog(matchRideId);
+                    break;
+                case "4":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutDriverFoundDialog(matchRideId);
+                    break;
+                case "5":
+                    String driverRideID = intent.getStringExtra("driver_ride_id");
+                    popOutDriverIsOnTheWayDialog(driverRideID);
+                    break;
+            }
+        }
+    };
+    private void popOutDriverFoundDialog(String matchRideId){
+        bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        dialogFragment = new DriverFoundDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    @Override
+    public void acceptDriver() {
+        Intent intent = new Intent(this, RideActivity.class);
+        intent.putExtra("accept", "Accept");
+        startActivity(intent);
+    }
+
+    private void popOutRatingDialog(String matchRideId){
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        DialogFragment dialogFragment = new RatingDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    private void popOutDriverIsOnTheWayDialog(String driverRideID){
+        Bundle bundle = new Bundle();
+        bundle.putString("driver_ride_id", driverRideID);
+
+        DialogFragment dialogFragment = new DriverIsOtwDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    @Override
+    public void redirectToStartRideActivity(String matchRideId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+        startActivity(new Intent(this, StartRouteActivity.class).putExtras(bundle));
+    }
+
+    @Override
+    public void showSnackBar(String message) {
+        final Snackbar snackbar = Snackbar.make(editTextProfileMainLayout, message, Snackbar.LENGTH_SHORT);
+        snackbar.setActionTextColor(getResources().getColor(R.color.blue));
         snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -475,10 +631,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        setResult(requestCode, intent);
-        super.onBackPressed();
+    public void refresh() {
+
     }
 
+    @Override
+    public void onFocusChange(View view, boolean b) {
+        switch (view.getId()){
+            case R.id.edit_profile_dialog_profile_username:
+                if(b)
+                    editProfileDialogLabelUsername.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                else
+                    editProfileDialogLabelUsername.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.transparent)));
+                break;
+
+        }
+    }
+    /*-------------------------------------------------------------end of acceted ride by driver----------------------------------------------------------*/
+    /*-----------------------------------------------------------------sign out setting---------------------------------------------------------------*/
+
+    private void logOutSetting(){
+        googleSignOut();
+        requestCode = LOGOUT_REQUEST;
+        onBackPressed();
+    }
+    private void googleSignOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(@NonNull Status status) {
+                    }
+                });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        showSnackBar("Something Went Wrong. :(");
+    }
 }

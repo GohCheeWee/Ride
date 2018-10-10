@@ -6,6 +6,21 @@
     android:orientation="vertical"
     tools:context=".ride.comfirm.startRoute.StartRouteActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_start_route_moving_text"
+        android:text="@string/activity_start_route_otw_moving_text"
+        android:padding="5dp"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:textColor="@color/white"
+        android:background="@color/green"
+        android:fontFamily="@string/font_family_condensed"
+        android:textStyle="bold"/>
+
     <include
         layout="@layout/actionbar"
         android:layout_width="match_parent"

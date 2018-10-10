@@ -1,5 +1,9 @@
 package com.jby.ride.ride.comfirm;
 
+import com.jby.ride.ride.comfirm.object.OtherRiderInCarObject;
+
+import java.util.ArrayList;
+
 public class ConfirmRideObject {
     private String pickUpPoint;
     private String dropOffPoint;
@@ -16,9 +20,14 @@ public class ConfirmRideObject {
     private String driver_plate;
     private String driver_brand;
     private String driver_model;
+    private String driver_ride_id;
+    private ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList;
 
 
-    public ConfirmRideObject(String pickUpPoint, String dropOffPoint, String paymentMethod, String date, String time, String note, String fare, String id, String status, String driverName, String driverImage, String driverGender, String driver_plate, String driver_brand, String driver_model) {
+    public ConfirmRideObject(String pickUpPoint, String dropOffPoint, String paymentMethod, String date, String time, String note,
+                             String fare, String id, String status, String driverName, String driverImage, String driverGender,
+                             String driver_plate, String driver_brand, String driver_model, String driver_ride_id,
+                             ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList) {
         this.pickUpPoint = pickUpPoint;
         this.dropOffPoint = dropOffPoint;
         this.paymentMethod = paymentMethod;
@@ -34,6 +43,8 @@ public class ConfirmRideObject {
         this.driver_plate = driver_plate;
         this.driver_brand = driver_brand;
         this.driver_model = driver_model;
+        this.otherRiderInCarObjectArrayList = otherRiderInCarObjectArrayList;
+        this.driver_ride_id = driver_ride_id;
     }
 
     public String getPickUpPoint() {
@@ -94,5 +105,13 @@ public class ConfirmRideObject {
 
     public String getDriver_model() {
         return driver_model;
+    }
+
+    public String getDriver_ride_id() {
+        return driver_ride_id;
+    }
+
+    public ArrayList<OtherRiderInCarObject> getOtherRiderInCarObjectArrayList() {
+        return otherRiderInCarObjectArrayList;
     }
 }

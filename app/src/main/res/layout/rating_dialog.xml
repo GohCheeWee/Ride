@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:gravity="center"
+        android:id="@+id/rating_dialog_parent_layout"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:id="@+id/rating_dialog_header_layout"
+                android:layout_height="?actionBarSize">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/app_name"
+                    android:id="@+id/rating_dialog_cancel_button"
+                    android:src="@drawable/driver_found_dialog_cancel_icon"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rating_dialog_date" />
+
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/rating_dialog_user_icon"
+                android:layout_centerInParent="true"
+                android:layout_below="@id/rating_dialog_header_layout" />
+
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="@color/white"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/rating_dialog_custom_linear_layout_with_shadow"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+                android:layout_height="match_parent">
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1.0"
+                    android:progressTint="@color/red"
+                    android:id="@+id/rating_dialog_rating_bar"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/rating_dialog_rating_status"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:gravity="center"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold|italic"
+                    android:textSize="16sp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:maxHeight="70dp"
+                    android:textSize="13sp"
+                    android:padding="5dp"
+                    android:gravity="start"
+                    android:inputType="textImeMultiLine"
+                    android:id="@+id/rating_dialog_comment"
+                    android:background="@drawable/rating_dialog_custom_edit_text"
+                    android:hint="@string/rating_dialog_hint_comment" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:padding="10dp"
+                    android:textColor="@color/red"
+                    android:textStyle="bold|italic"
+                    android:text="@string/rating_dialog_label_detail"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:background="@drawable/rating_dialog_custom_edit_text"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:padding="10dp"
+                        android:id="@+id/rating_dialog_pick_up_layout"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/activity_main_startpoint"
+                            android:contentDescription="@string/app_name"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:id="@+id/rating_dialog_pick_up_point"
+                            android:gravity="center_vertical"
+                            android:layout_weight="5"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#30000000"
+                        android:layout_marginStart="10dp"
+                        android:layout_below="@id/rating_dialog_pick_up_layout"
+                        android:id="@+id/rating_dialog_divider"
+                        android:layout_marginEnd="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:padding="10dp"
+                        android:layout_below="@id/rating_dialog_divider"
+                        android:id="@+id/rating_dialog_drop_off_layout"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/activity_main_endpoint"
+                            android:contentDescription="@string/app_name"
+                            android:layout_weight="1"/>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:maxLines="1"
+                            android:gravity="center_vertical"
+                            android:ellipsize="end"
+                            android:id="@+id/rating_dialog_drop_off_point"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:layout_weight="5"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/rating_dialog_fare"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:textColor="@color/red"
+                    android:textSize="35sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:elevation="2dp"
+            android:enabled="false"
+            android:id="@+id/rating_dialog_submit_button"
+            android:text="@string/rating_dialog_button_submit"
+            android:background="@drawable/rating_dialog_custom_disable_button"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/rating_dialog_progress_bar_layout"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:indeterminateBehavior="repeat"
+            android:indeterminateTintMode="src_in"
+            android:indeterminateTint="@color/red" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

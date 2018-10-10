@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/activity_main_custom_linear_layout_with_shadow"
+    android:padding="10dp"
+    tools:context=".ride.RideActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="30/04/2018 12:50pm"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:id="@+id/fragment_past_ride_list_view_item_data_time"
+        android:fontFamily="@string/font_family_condensed"
+        android:padding="5dp"
+        android:gravity="end"
+        android:textSize="18sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:src="@drawable/activity_main_startpoint"
+            android:padding="5dp"
+            android:contentDescription="@string/app_name"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:text="30/04/2018 12:50pm"
+            android:textColor="@color/black"
+            android:fontFamily="@string/font_family_condensed"
+            android:padding="5dp"
+            android:id="@+id/fragment_past_ride_list_view_item_pick_up"
+            android:gravity="center_vertical"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/fragment_past_ride_dot_icon"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:src="@drawable/activity_main_endpoint"
+            android:padding="5dp"
+            android:contentDescription="@string/app_name"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:text="30/04/2018 12:50pm"
+            android:textColor="@color/black"
+            android:fontFamily="@string/font_family_condensed"
+            android:padding="5dp"
+            android:id="@+id/fragment_past_ride_list_view_item_drop_off"
+            android:gravity="center_vertical"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:id="@+id/fragment_past_ride_list_view_item_fare"
+        android:fontFamily="@string/font_family_condensed"
+        android:text="RM 10"/>
+</LinearLayout>

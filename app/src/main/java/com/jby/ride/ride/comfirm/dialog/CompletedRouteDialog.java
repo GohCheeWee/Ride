@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.jby.ride.R;
@@ -39,8 +41,9 @@ public class CompletedRouteDialog extends DialogFragment {
         completedRouteDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                completedRouteDialogCallBack.updateConfirmRideListView(UPDATE_CONFIRMED_RIDE_REQUEST);
+                completedRouteDialogCallBack.popOutRatingDialogRequest(UPDATE_CONFIRMED_RIDE_REQUEST);
                 dismiss();
+                Log.d("HAHA","Dialog is Run!");
             }
         });
     }
@@ -57,6 +60,6 @@ public class CompletedRouteDialog extends DialogFragment {
     }
 
     public interface CompletedRouteDialogCallBack {
-        void updateConfirmRideListView(int requestCode);
+        void popOutRatingDialogRequest(int requestCode);
     }
 }

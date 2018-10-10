@@ -5,6 +5,7 @@
     android:gravity="center"
     android:padding="20dp"
     android:orientation="vertical"
+    android:id="@+id/driver_found_dialog_parent_layout"
     android:layout_height="match_parent">
 
     <ProgressBar
@@ -57,12 +58,12 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/driver_found_dialog_picture_parent_layout"
             android:layout_height="220dp">
-
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
+                android:layout_height="match_parent"
                 android:background="@color/background"
                 android:id="@+id/driver_found_dialog_background_picture"
                 android:contentDescription="@string/driver_found_dialog"
@@ -91,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:fontFamily="sans-serif-condensed"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/white"
                     android:textStyle="bold"
                     android:id="@+id/driver_found_dialog_driver"
                     android:text="@string/app_name"

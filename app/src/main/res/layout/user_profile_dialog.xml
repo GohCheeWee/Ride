@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/transparent_black"
+    android:gravity="center"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/something_missing_dialog_custom_background"
+        android:paddingTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:id="@+id/user_profile_dialog_main_layout"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+       <ImageView
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:padding="10dp"
+           android:id="@+id/user_profile_dialog_cancel_icon"
+           android:layout_alignParentEnd="true"
+           android:contentDescription="@string/app_name"
+           android:src="@drawable/driver_found_dialog_cancel_icon"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:padding="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/user_profile_dialog_user_icon"
+            android:src="@drawable/user_profile_dialog_user_icon"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            android:layout_below="@id/user_profile_dialog_user_icon"
+            android:layout_centerInParent="true"
+            android:id="@+id/user_profile_dialog_username"
+            android:textSize="22sp"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@id/user_profile_dialog_username"
+            android:layout_below="@id/user_profile_dialog_user_icon"
+            android:contentDescription="@string/app_name"
+            android:id="@+id/user_profile_dialog_gender_icon" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/user_profile_dialog_username"
+            android:id="@+id/user_profile_dialog_divider"
+            android:background="#30000000"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/user_profile_dialog_divider"
+            android:background="@color/white"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:padding="5dp"
+                android:id="@+id/user_profile_dialog_comepleted_trip"
+                android:fontFamily="@string/font_family_condensed"
+                android:textColor="@color/grey"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="20sp"
+                android:fontFamily="@string/font_family_condensed"
+                android:textColor="@color/grey"
+                android:textStyle="bold"
+                android:text="@string/activity_profile_completed_ride"/>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_profile_dialog_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:visibility="visible"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"/>
+
+</LinearLayout>

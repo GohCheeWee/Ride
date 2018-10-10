@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:id="@+id/activity_start_route_parent_layout"
+    tools:context=".ride.comfirm.startRoute.StartRouteActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="50dp"
+        android:id="@+id/activity_start_route_custom_marker_layout_user_icon"
+        android:layout_height="50dp" />
+
+</LinearLayout>

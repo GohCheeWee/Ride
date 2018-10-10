@@ -7,6 +7,7 @@
     <string name="activity_login_label_before_register">Do not have an account? </string>
     <string name="activity_login_label_register"><b>Sign up Now</b></string>
     <string name="activity_login_label_forgot_password"><b>Forgot Password?</b></string>
+    <string name="activity_login_sign_in_by_google">Sign In With Google</string>
 
     <!--register activity-->
     <string name="activity_register_editext_username">Username</string>
@@ -64,15 +65,18 @@
     <string name="edit_profile_dialog_label_save">Save</string>
     <string name="edit_profile_dialog_label_logout">LOGOUT</string>
     <string name="edit_profile_dialog_title">Profile</string>
+    <string name="edit_profile_dialog_label_edit">EDIT PROFILE</string>
+    <string name="activity_profile_rating">Rating</string>
+    <string name="edit_profile_dialog_gender">Gender</string>
     <!--profile upload photo dialog-->
     <string name="edit_profile_upload_photo_dialog_title">Upload a Photo</string>
     <string name="edit_profile_upload_photo_dialog_photo">Take a New Photo</string>
     <string name="edit_profile_upload_photo_dialog_gallery">Choose From Gallery</string>
     <!--Invalid time dialog-->
-    <string name="activity_main_invalid_time_dialog_title">Warning</string>
+    <string name="activity_main_invalid_time_dialog_title">Invalid Time</string>
     <string name="activity_main_invalid_time_dialog_message">Sorry, route must be at least 10 minutes from now</string>
     <string name="activity_main_invalid_time_dialog_button">ALRIGHT</string>
-    <string name="activity_profile_rating">Rating</string>
+
     <!--pending ride-->
     <string name="fragment_confirm_ride_label_no_upcoming_trip">No upcoming trips</string>
     <string name="fragment_confirm_ride_button">Create route</string>
@@ -110,7 +114,7 @@
     <!--match ride Activity-->
     <string name="match_ride_activity" />
     <string name="match_ride_activity_label_status">Status:</string>
-    <string name="match_ride_activity_status_coming">Your Driver Is On The Way Now!</string>
+    <string name="match_ride_activity_status_coming">Your Driver Is On The Way</string>
     <string name="match_ride_activity_status_arrived">Your driver has arrived!</string>
     <string name="match_ride_activity_status_not_start">Pending</string>
     <string name="match_ride_activity_status_destination">Your Driver Is On The To Your Destination</string>
@@ -118,9 +122,32 @@
 
     <!--Start Route Activity-->
     <string name="start_route_activity">Tracking</string>
+    <string name="activity_start_route_otw_moving_text">Your driver will be arrived in few minutes. Please get ready yay :)</string>
+    <string name="activity_start_route_arrive_moving_text">Your driver have arrived. Please get on the car as soon as possible.</string>
     <!--comeplte route dialog-->
     <string name="completed_route_dialog_title">Congratulations</string>
     <string name="completed_route_dialog_label">Yay! You have finished your journey successful!</string>
     <string name="completed_route_dialog_button">Okay</string>
+    <!--rating dialog-->
+    <string name="rating_dialog_label">What was the service about Chee Wee</string>
+    <string name="rating_dialog_hint_comment">Comman are anonymously shared with drivers</string>
+    <string name="rating_dialog_label_detail">Trip Details</string>
+    <string name="rating_dialog_button_submit">Submit</string>
+    <!--driver otw dialog-->
+    <string name="driver_is_otw_dialog_label">Driver Is On The Way</string>
+    <string name="driver_is_otw_dialog_label_content">Your driver will be arrived in few minutes more. Please well prepared everything before driver is come. Wish you have a nice day :)</string>
+    <string name="driver_is_otw_dialog_track_button">Track My Driver</string>
 
+    <string name="activity_match_ride_list_view_item_label_other_rider"><u>Other Riders</u></string>
+    <!--user profile dialog-->
+    <string name="activity_profile_completed_ride">Completed Ride</string>
+    <!--driver pick up dialog-->
+    <string name="driver_pick_up_dialog_title">Yay, Enjoy your journey</string>
+    <string name="driver_pick_up_dialog_content">Congratz, you have successfully hitch-hike right now :) Keep chat with each other might a good way to ice breaking between each other. Wish you have a nice day :)</string>
+    <string name="driver_pick_up_dialog_button">Alright</string>
+    <!--location request dialog-->
+    <string name="location_request_dialog_title">Location Request</string>
+    <string name="location_request_dialog_content">In order to get your current location and better user experience, you have to enable your location permission.</string>
+    <string name="location_request_dialog_enable_button">Enable</string>
+    <string name="activity_profile_label_completed_ride">Completed Ride</string>
 </resources>

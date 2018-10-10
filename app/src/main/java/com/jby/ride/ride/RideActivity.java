@@ -1,11 +1,16 @@
 package com.jby.ride.ride;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jby.ride.R;
+import com.jby.ride.others.dialog.DriverFoundDialog;
+import com.jby.ride.others.dialog.DriverIsOtwDialog;
+import com.jby.ride.others.dialog.RatingDialog;
 import com.jby.ride.others.SquareHeightLinearLayout;
 import com.jby.ride.ride.comfirm.ConfirmRideFragment;
+import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
 import com.jby.ride.ride.past.PastRideFragment;
 import com.jby.ride.ride.pending.PendingRideFragment;
 import com.jby.ride.ride.pending.pendingDetail.PendingRideDetailActivity;
@@ -24,9 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.jby.ride.home.MainActivity.UPDATE_COUNTER_REQUEST;
+import static com.jby.ride.others.MyFireBaseMessagingService.NotificationBroadCast;
 
 public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener,
-        View.OnClickListener{
+        View.OnClickListener,  DriverFoundDialog.DriverFoundDialogCallBack, RatingDialog.RatingDialogCallBack,
+        DriverIsOtwDialog.DriverIsOtwDialogCallBack {
     private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon, actionBarLogout;
     private TextView actionBarTitle;
 
@@ -80,22 +91,31 @@ public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSe
         actionBarCloseIcon.setOnClickListener(this);
 
         rideActivityTabLayout.addOnTabSelectedListener(this);
-        setupTabLayout();
+
 
         Intent intent = getIntent();
         if(intent != null){
+            //go to confirm tab
             if(intent.getStringExtra("accept") != null){
-                TabLayout.Tab tab = rideActivityTabLayout.getTabAt(0);
-                assert tab != null;
-                tab.select();
+                setupTabLayout(true, false, false);
+            }
+            else if(intent.getStringExtra("complete") != null){
+                String matchRideId = intent.getStringExtra("match_ride_id");
+
+                setupTabLayout(false, false, true);
+                popOutRatingDialog(matchRideId);
+            }
+            //default is go to pending tab
+            else {
+                setupTabLayout(false, true, false);
             }
         }
     }
-    private void setupTabLayout(){
+    private void setupTabLayout(boolean confirm, boolean pending, boolean past){
         rideActivityTabLayout.removeAllTabs();
-        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Comfirm"));
-        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Pending"), true);
-        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Past"));
+        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Comfirm"),confirm);
+        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Pending"), pending);
+        rideActivityTabLayout.addTab(rideActivityTabLayout.newTab().setText("Past"), past);
 
         fragment2 = pendingRideFragment;
         pendingRideFragment = (PendingRideFragment)fragment2;
@@ -137,7 +157,8 @@ public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSe
         ft = fm.beginTransaction();
         ft.replace(R.id.activity_ride_frame_layout, fragment);
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.commit();
+//        ft.commit();
+        ft.commitAllowingStateLoss();
 
     }
 
@@ -168,7 +189,7 @@ public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     //    snackBar setting
-    private void showSnackBar(String message){
+    public void showSnackBar(String message){
         final Snackbar snackbar = Snackbar.make(rideActivityFrameLayout, message, Snackbar.LENGTH_SHORT);
         snackbar.setAction("Dismiss", new View.OnClickListener() {
             @Override
@@ -180,9 +201,91 @@ public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     @Override
+    public void refresh() {
+
+    }
+
+    @Override
     public void onBackPressed() {
         Intent intent = new Intent();
         setResult(requestCode, intent);
         super.onBackPressed();
     }
+
+    /*-------------------------------------------------------------when ride is accepted by driver-----------------------------------------------------*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter(NotificationBroadCast));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String id = intent.getStringExtra("id");
+            String matchRideId;
+            switch(id){
+                case "3":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutRatingDialog(matchRideId);
+                    break;
+                case "4":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutDriverFoundDialog(matchRideId);
+                    break;
+                case "5":
+                    String driverRideID = intent.getStringExtra("driver_ride_id");
+                    popOutDriverIsOnTheWayDialog(driverRideID);
+                    break;
+            }
+        }
+    };
+    private void popOutDriverFoundDialog(String matchRideId){
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        DialogFragment dialogFragment = new DriverFoundDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    @Override
+    public void acceptDriver() {
+        Intent intent = new Intent(this, RideActivity.class);
+        intent.putExtra("accept", "Accept");
+        startActivity(intent);
+        finish();
+    }
+
+    private void popOutRatingDialog(String matchRideId){
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        DialogFragment dialogFragment = new RatingDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    private void popOutDriverIsOnTheWayDialog(String driverRideID){
+        Bundle bundle = new Bundle();
+        bundle.putString("driver_ride_id", driverRideID);
+
+        DialogFragment dialogFragment = new DriverIsOtwDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    @Override
+    public void redirectToStartRideActivity(String matchRideId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+        startActivity(new Intent(this, StartRouteActivity.class).putExtras(bundle));
+    }
+    /*-------------------------------------------------------------end of acceted ride by driver----------------------------------------------------------*/
 }

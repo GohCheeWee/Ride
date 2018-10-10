@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -19,9 +20,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
         <service
             android:name=".others.FetchAddressIntentService"
             android:exported="false" />
+
         <service
             android:name=".others.MyFireBaseMessagingService"
             android:exported="false">
@@ -44,6 +47,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -53,7 +57,11 @@
             android:name=".registration.RegisterActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity android:name=".profile.ProfileActivity" />
+
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
@@ -73,6 +81,7 @@
         </provider>
 
         <activity android:name=".ride.comfirm.startRoute.StartRouteActivity"/>
+
     </application>
 
 </manifest>

@@ -1,21 +1,25 @@
 package com.jby.ride.ride.comfirm;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jby.ride.R;
+import com.jby.ride.ride.comfirm.object.OtherRiderInCarObject;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.jby.ride.profile.ProfileActivity.prefix;
 
 public class MatchRideAdapter extends BaseAdapter {
     private Context context;
@@ -46,7 +50,7 @@ public class MatchRideAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (view == null){
             view = View.inflate(this.context, R.layout.activity_match_ride_list_view_item, null);
             viewHolder = new ViewHolder(view);
@@ -64,6 +68,7 @@ public class MatchRideAdapter extends BaseAdapter {
         String carPlate = object.getDriver_plate();
         String carBrand = object.getDriver_brand();
         String carModel = object.getDriver_model();
+        final ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList = object.getOtherRiderInCarObjectArrayList();
         //    path
         String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
         String vehicleDetail = carPlate + " . " + carBrand + " " + carModel;
@@ -113,6 +118,43 @@ public class MatchRideAdapter extends BaseAdapter {
         else{
             viewHolder.driver.setImageDrawable(context.getResources().getDrawable(R.drawable.driver_found_dialog_driver_icon));
         }
+        // for other ride image icon purpose
+        if(otherRiderInCarObjectArrayList.size() > 0){
+            viewHolder.otherRiderLayout.setVisibility(View.VISIBLE);
+            viewHolder.labelOtherRider.setVisibility(View.VISIBLE);
+
+            for(int j = 0 ; j < otherRiderInCarObjectArrayList.size(); j++){
+                final CircleImageView image = new CircleImageView(context);
+                String otherRiderProfilePictureUrl = prefix + otherRiderInCarObjectArrayList.get(i).getProfile_picture();
+
+                //calculate image view size based on device width
+                ViewTreeObserver viewTreeObserver = viewHolder.otherRiderLayout.getViewTreeObserver();
+                if (viewTreeObserver.isAlive()) {
+                    viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            viewHolder.otherRiderLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            int parentLayoutWidth = viewHolder.otherRiderLayout.getWidth();
+
+                            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)image.getLayoutParams();
+                            layoutParams.width = parentLayoutWidth/8;
+                            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                            image.setLayoutParams(layoutParams);
+                        }
+                    });
+                }
+                viewHolder.otherRiderLayout.addView(image);
+                Picasso.get()
+                        .load(otherRiderProfilePictureUrl)
+                        .error(R.drawable.loading_gif)
+                        .into(image);
+            }
+        }
+        else {
+            viewHolder.otherRiderLayout.setVisibility(View.GONE);
+            viewHolder.labelOtherRider.setVisibility(View.GONE);
+        }
+
 
         viewHolder.fare.setText(fare);
         viewHolder.pickup.setText(object.getPickUpPoint());
@@ -131,11 +173,20 @@ public class MatchRideAdapter extends BaseAdapter {
                 matchRideAdapterCallBack.trackMyRoute(i);
             }
         });
+
+        viewHolder.otherRiderLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickEffect(view);
+                matchRideAdapterCallBack.viewAllRiderDialog(otherRiderInCarObjectArrayList);
+            }
+        });
         return view;
     }
 
     public interface MatchRideAdapterCallBack{
         void trackMyRoute(int position);
+        void viewAllRiderDialog(ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList);
     }
     //click effect
     public void clickEffect(View view){
@@ -146,9 +197,10 @@ public class MatchRideAdapter extends BaseAdapter {
 
     private static class ViewHolder{
         private TextView status, fare, pickup, dropoff, date, payment_method, note, driver_name, driver_vehicle;
-        private TextView trackRoute;
+        private TextView trackRoute, labelOtherRider;
         private CircleImageView driver;
         private ImageView driver_gender;
+        private LinearLayout otherRiderLayout;
         ViewHolder (View view){
             status = (TextView)view.findViewById(R.id.activity_match_ride_list_view_status);
             fare = (TextView)view.findViewById(R.id.activity_match_ride_list_view_fare);
@@ -165,6 +217,9 @@ public class MatchRideAdapter extends BaseAdapter {
 
             driver = (CircleImageView)view.findViewById(R.id.activity_match_ride_list_view_driver);
             driver_gender = (ImageView)view.findViewById(R.id.activity_match_ride_list_view_driver_gender_icon);
+
+            otherRiderLayout= view.findViewById(R.id.activity_match_ride_list_view_item_other_rider_layout);
+            labelOtherRider = view.findViewById(R.id.activity_match_ride_list_view_item_label_other_rider);
         }
     }
 }

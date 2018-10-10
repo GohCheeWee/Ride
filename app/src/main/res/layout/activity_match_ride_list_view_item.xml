@@ -296,6 +296,27 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_match_ride_list_view_item_label_other_rider"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:id="@+id/activity_match_ride_list_view_item_label_other_rider"
+            android:fontFamily="@string/casual"
+            android:textColor="@color/grey"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:id="@+id/activity_match_ride_list_view_item_other_rider_layout"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_height="?actionBarSize">
+
+
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

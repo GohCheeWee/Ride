@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 
-
 public class PendingRideFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         AbsListView.OnScrollListener, CustomListView.OnDetectScrollListener,
         AdapterView.OnItemClickListener{

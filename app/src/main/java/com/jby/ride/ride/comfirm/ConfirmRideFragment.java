@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +16,15 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jby.ride.R;
 import com.jby.ride.others.CustomListView;
-import com.jby.ride.ride.RideActivity;
+import com.jby.ride.ride.comfirm.dialog.ViewOtherRiderDialog;
+import com.jby.ride.ride.comfirm.object.OtherRiderInCarObject;
 import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
-import com.jby.ride.ride.pending.PendingRideObject;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
@@ -59,13 +59,13 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
     private boolean isScroll = false;
     //    if finish load then become true
     boolean finishLoadAll = false;
-
     //    asyncTask
     AsyncTaskManager asyncTaskManager;
     JSONObject jsonObjectLoginResponse;
     ArrayList<ApiDataObject> apiDataObjectArrayList;
     Handler handler;
     public static int UPDATE_CONFIRMED_RIDE_REQUEST = 400;
+    private int position;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,8 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
         confirmRideObjectArrayList = new ArrayList<>();
         matchRideAdapter = new MatchRideAdapter(getActivity(), confirmRideObjectArrayList, this);
         handler = new Handler();
+
+
     }
 
     private void objectSetting() {
@@ -152,7 +154,9 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
                                     jsonArray.getJSONObject(i).getString("driver_gender"),
                                     jsonArray.getJSONObject(i).getString("driver_car_plate"),
                                     jsonArray.getJSONObject(i).getString("driver_car_brand"),
-                                    jsonArray.getJSONObject(i).getString("driver_car_model")
+                                    jsonArray.getJSONObject(i).getString("driver_car_model"),
+                                    jsonArray.getJSONObject(i).getString("driver_ride_id"),
+                                    setUpOtherRiderArray(jsonArray.getJSONObject(i).getJSONObject("other_rider"))
                             ));
                         }
                     }
@@ -184,6 +188,27 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
         confirmRideFragmentListView.removeFooterView(confirmRideFragmentListViewFooter);
         setUpView();
         matchRideAdapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<OtherRiderInCarObject> setUpOtherRiderArray(JSONObject jsonObject){
+        ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList = new ArrayList<>();
+        try {
+            if(jsonObject.getString("status").equals("1")){
+                JSONArray jsonArray = jsonObject.getJSONArray("value");
+                for(int i = 0; i < jsonArray.length(); i++){
+                    otherRiderInCarObjectArrayList.add(new OtherRiderInCarObject(
+                            jsonArray.getJSONObject(i).getString("username"),
+                            jsonArray.getJSONObject(i).getString("gender"),
+                            jsonArray.getJSONObject(i).getString("user_id"),
+                            jsonArray.getJSONObject(i).getString("profile_picture")
+                    ));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return otherRiderInCarObjectArrayList;
     }
 
     private void setUpView() {
@@ -273,16 +298,21 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
     public void trackMyRoute(int position) {
         Intent intent = new Intent(getActivity(), StartRouteActivity.class);
         Bundle bundle = new Bundle();
+        this.position = position;
+
         bundle.putString("match_ride_id", confirmRideObjectArrayList.get(position).getId());
         intent.putExtras(bundle);
         startActivityForResult(intent, UPDATE_CONFIRMED_RIDE_REQUEST);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == UPDATE_CONFIRMED_RIDE_REQUEST){
-            onRefresh();
-        }
+    public void viewAllRiderDialog(ArrayList<OtherRiderInCarObject> otherRiderInCarObjectArrayList) {
+        Bundle bundle = new Bundle();
+        DialogFragment dialogFragment = new ViewOtherRiderDialog();
+        FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+
+        bundle.putParcelableArrayList("OtherRiderInCarArrayList", otherRiderInCarObjectArrayList);
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
     }
 }

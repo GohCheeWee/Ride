@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_white"
+    tools:context=".ride.RideActivity">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:id="@+id/actionbar"
+        android:layout_height="?actionBarSize"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_other_rider_dialog_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:visibility="gone"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"
+        android:layout_centerInParent="true"/>
+
+
+    <com.jby.ride.others.CustomListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="5dp"
+        android:divider="@color/background_white"
+        android:layout_marginTop="5dp"
+        android:scrollbars="none"
+        android:id="@+id/view_other_rider_dialog_list_view"
+        android:layout_below="@id/actionbar"/>
+
+</RelativeLayout>

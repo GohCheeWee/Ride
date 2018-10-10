@@ -1,4 +1,4 @@
-package com.jby.ride.others;
+package com.jby.ride.others.dialog;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -10,11 +10,13 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +46,8 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
     private ImageView driverFoundDialogBackgroundPicture, driverFoundDialogCancelIcon, driverFoundDialogGenderIcon;
     private Button driverFoundDialogConfirmButton;
     private ProgressBar driverFoundDialogProgressBar;
-    private LinearLayout driverFoundDialogMainLayout;
+    private LinearLayout driverFoundDialogMainLayout, driverFoundDialogParentLayout;
+    private RelativeLayout driverFoundDialogPictureParentLayout;
 
     //    path
     private static String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
@@ -94,6 +97,9 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
         driverFoundDialogProgressBar = (ProgressBar) rootView.findViewById(R.id.driver_found_dialog_progress_bar);
         driverFoundDialogMainLayout = (LinearLayout) rootView.findViewById(R.id.driver_found_dialog_main_layout);
 
+        driverFoundDialogParentLayout = (LinearLayout)rootView.findViewById(R.id.driver_found_dialog_parent_layout);
+        driverFoundDialogPictureParentLayout = rootView.findViewById(R.id.driver_found_dialog_picture_parent_layout);
+
         handler = new Handler();
 
     }
@@ -101,6 +107,7 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
     private void objectSetting() {
         SharedPreferenceManager.setMatchRideID(getActivity(), "default");
         driverFoundDialogConfirmButton.setOnClickListener(this);
+        driverFoundDialogCancelButton.setOnClickListener(this);
         Bundle mArgs = getArguments();
         if (mArgs != null) {
             matchRideID = mArgs.getString("match_ride_id");
@@ -112,6 +119,7 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
                 getDriverInformation();
             }
         },200);
+        calcualateHeight();
     }
 
     public void getDriverInformation(){
@@ -175,6 +183,7 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
     public void acceptDriver(){
         apiDataObjectArrayList = new ArrayList<>();
         apiDataObjectArrayList.add(new ApiDataObject("match_ride_id", matchRideID));
+        apiDataObjectArrayList.add(new ApiDataObject("status", "2"));
         apiDataObjectArrayList.add(new ApiDataObject("accept", "1"));
 
         asyncTaskManager = new AsyncTaskManager(
@@ -200,6 +209,53 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
                                 driverFoundDialogCallBack.acceptDriver();
                             }
                         },200);
+                        dismiss();
+                    }
+                    else if(jsonObjectLoginResponse.getString("status").equals("2"))
+                        showSnackBar("Something went wrong!");
+                }
+                else {
+                    Toast.makeText(getActivity(), "Network Error!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (InterruptedException e) {
+                Toast.makeText(getActivity(), "Interrupted Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                Toast.makeText(getActivity(), "Execution Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Toast.makeText(getActivity(), "JSON Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                Toast.makeText(getActivity(), "Connection Time Out!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+        driverFoundDialogProgressBar.setVisibility(View.GONE);
+    }
+
+    public void rejectDriverRequest(){
+        apiDataObjectArrayList = new ArrayList<>();
+        apiDataObjectArrayList.add(new ApiDataObject("match_ride_id", matchRideID));
+        apiDataObjectArrayList.add(new ApiDataObject("reject", "1"));
+
+        asyncTaskManager = new AsyncTaskManager(
+                getActivity(),
+                new ApiManager().userCreateRide,
+                new ApiManager().getResultParameter(
+                        "",
+                        new ApiManager().setData(apiDataObjectArrayList),
+                        ""
+                )
+        );
+        asyncTaskManager.execute();
+
+        if (!asyncTaskManager.isCancelled()) {
+            try {
+                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
+
+                if (jsonObjectLoginResponse != null) {
+                    if (jsonObjectLoginResponse.getString("status").equals("1")) {
                         dismiss();
                     }
                     else if(jsonObjectLoginResponse.getString("status").equals("2"))
@@ -282,6 +338,7 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             d.getWindow().setLayout(width, height);
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            d.getWindow().setWindowAnimations(R.style.dialog_up_down);
         }
     }
 
@@ -297,11 +354,41 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
                     }
                 },200);
                 break;
+            case R.id.driver_found_dialog_cancel_button:
+                driverFoundDialogProgressBar.setVisibility(View.VISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rejectDriverRequest();
+                    }
+                },200);
+                break;
+        }
+    }
+
+    private void calcualateHeight(){
+        ViewTreeObserver viewTreeObserver = driverFoundDialogParentLayout.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+
+                    driverFoundDialogParentLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int parentLayoutHeight = driverFoundDialogParentLayout.getHeight();
+                    int parentLayoutWidth = driverFoundDialogParentLayout.getWidth();
+
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)driverFoundDialogPictureParentLayout.getLayoutParams();
+                    layoutParams.height = parentLayoutHeight/3;
+                    layoutParams.width = parentLayoutWidth;
+
+                    driverFoundDialogPictureParentLayout.setLayoutParams(layoutParams);
+
+                }
+            });
         }
     }
 
     public interface DriverFoundDialogCallBack {
         void acceptDriver();
     }
-
 }

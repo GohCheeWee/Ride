@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
+import android.util.Log;
 
 import com.jby.ride.R;
 
@@ -77,16 +78,21 @@ class CustomNotificationManager {
 
        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mCtx);
        Notification notification;
-       notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher).setTicker(title).setWhen(0)
-               .setAutoCancel(true)
+       notification = mBuilder
+               .setSmallIcon(R.mipmap.ic_launcher)
                .setContentIntent(resultPendingIntent)
                .setContentTitle(title)
-               .setSmallIcon(R.mipmap.ic_launcher)
-               .setLargeIcon(BitmapFactory.decodeResource(mCtx.getResources(), R.mipmap.ic_launcher))
                .setContentText(message)
-               .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+               .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+               /* .setTicker(title)*/
+               .setAutoCancel(true)
+               /* .setLargeIcon(BitmapFactory.decodeResource(mCtx.getResources(), R.mipmap.ic_launcher))*/
+               .setVisibility(Notification.VISIBILITY_PUBLIC)
                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                .setVibrate(pattern)
+               .setShowWhen(true)
+               .setPriority(NotificationCompat.PRIORITY_MAX)
+               .setLights(20, 20 , 20)
                .build();
 
        notification.flags |= Notification.FLAG_AUTO_CANCEL;

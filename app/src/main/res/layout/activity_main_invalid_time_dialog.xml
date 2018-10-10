@@ -11,26 +11,37 @@
         android:background="@drawable/something_missing_dialog_custom_background"
         android:padding="20dp"
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/activity_main_invalid_time_dialog_title"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:fontFamily="@string/font_family_condensed"
-            android:gravity="center"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:src="@drawable/invalid_time_dialog_clock_icon"
+            android:id="@+id/driver"/>
+
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:textSize="16sp"
-            android:text="@string/activity_main_invalid_time_dialog_message"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="18sp"
             android:fontFamily="@string/font_family_condensed"
-            android:textColor="@color/grey"/>
+            android:text="@string/activity_main_invalid_time_dialog_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/activity_main_invalid_time_dialog_message"/>
 
         <Button
             android:layout_width="match_parent"

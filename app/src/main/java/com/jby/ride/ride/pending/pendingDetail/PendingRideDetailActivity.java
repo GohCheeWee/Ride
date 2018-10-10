@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jby.ride.Object.MarkerObject;
+import com.jby.ride.Object.PolylineObject;
 import com.jby.ride.R;
 import com.jby.ride.others.CustomMarker;
 import com.jby.ride.others.DirectionsParser;
@@ -47,7 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static com.jby.ride.ride.RideActivity.DELETE_PENDING_RIDE;
 
 public class PendingRideDetailActivity extends AppCompatActivity implements OnMapReadyCallback,
-        View.OnClickListener, DeleteDialog.DeleteDialogCallBack{
+        View.OnClickListener, DeleteDialog.DeleteDialogCallBack, PolylineObject.PolyLineCallBack {
     private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon, actionBarLogout;
     private TextView actionBarTitle;
 
@@ -293,9 +294,7 @@ public class PendingRideDetailActivity extends AppCompatActivity implements OnMa
         }
 
         if(routeArray.size() == 2){
-            String url = getRequestDirection(routeArray.get(0).getLocation(), routeArray.get(1).getLocation());
-            requestDirection(url);
-            requestCameraFocus();
+            new PolylineObject(this, routeArray.get(0).getLocation(), routeArray.get(1).getLocation(), this).requestDirection();
         }
 
     }
@@ -310,95 +309,6 @@ public class PendingRideDetailActivity extends AppCompatActivity implements OnMa
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         googleMap.animateCamera(cu);
 
-    }
-
-    // getting direction path
-    private String getRequestDirection(LatLng origin, LatLng dest){
-        String pickUpPoint = "origin=" + origin.latitude +  "," + origin.longitude;
-        String dropOffPoint = "destination=" + dest.latitude +  "," + dest.longitude;
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-        String param = pickUpPoint + "&" + dropOffPoint + "&" + sensor +  "&" + mode;
-        String output = "json";
-        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
-    }
-
-    // request direction from api
-    public void requestDirection(String url){
-
-        asyncTaskManager = new AsyncTaskManager(
-                this,
-                url,
-                new ApiManager().getResultParameter(
-                        "", "", ""
-                )
-        );
-        asyncTaskManager.execute();
-
-        if (!asyncTaskManager.isCancelled()) {
-            try {
-                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
-                if (jsonObjectLoginResponse != null) {
-                    List<List<HashMap<String, String>>> routes;
-                    DirectionsParser directionsParser = new DirectionsParser();
-                    ArrayList<LatLng> points;
-                    PolylineOptions polylineOptions = null;
-                    String distance = "";
-                    String duration = "";
-
-                    routes = directionsParser.parse(jsonObjectLoginResponse);
-                    // Traversing through all the routes
-                    for(int i=0;i<routes.size();i++){
-                        points = new ArrayList<LatLng>();
-                        polylineOptions = new PolylineOptions();
-
-                        // Fetching i-th route
-                        List<HashMap<String, String>> path = routes.get(i);
-
-                        // Fetching all the points in i-th route
-                        for(int j=0;j<path.size();j++){
-                            HashMap<String,String> point = path.get(j);
-
-                            if(j==0){    // Get distance from the list
-                                distance = (String)point.get("distance");
-                                continue;
-                            }else if(j==1){ // Get duration from the list
-                                duration = (String)point.get("duration");
-                                continue;
-                            }
-
-                            double lat = Double.parseDouble(point.get("lat"));
-                            double lng = Double.parseDouble(point.get("lng"));
-                            LatLng position = new LatLng(lat, lng);
-
-                            points.add(position);
-                        }
-                        // Adding all the points in the route to LineOptions
-                        polylineOptions.addAll(points);
-                        polylineOptions.width(15);
-                        polylineOptions.color(Color.BLACK);
-                        polylineOptions.geodesic(true);
-                    }
-
-                    if(polylineOptions != null){
-                        googleMap.addPolyline(polylineOptions);
-//                        setDistanceDuration(duration, distance);
-                    }
-                }
-                else{
-                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
-                }
-            }catch (InterruptedException e) {
-                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                Toast.makeText(this, "Execution Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }  catch (TimeoutException e) {
-                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
@@ -467,5 +377,21 @@ public class PendingRideDetailActivity extends AppCompatActivity implements OnMa
         Intent intent = new Intent();
         setResult(requestCode, intent);
         super.onBackPressed();
+    }
+
+    @Override
+    public void setPolylineOptions(PolylineOptions polylineOptions) {
+        if(polylineOptions != null)
+            googleMap.addPolyline(polylineOptions);
+    }
+
+    @Override
+    public void setDistanceAndDuration(String distance, String duration) {
+
+    }
+
+    @Override
+    public void dismiss() {
+        requestCameraFocus();
     }
 }

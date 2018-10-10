@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
@@ -28,6 +27,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +38,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -69,24 +68,30 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.jby.ride.Object.AddressObject;
 import com.jby.ride.Object.MarkerObject;
+import com.jby.ride.Object.PolylineObject;
 import com.jby.ride.R;
 import com.jby.ride.home.dialog.InvalidTimeDialog;
 import com.jby.ride.home.dialog.NoteDialog;
 import com.jby.ride.others.CustomMarker;
-import com.jby.ride.others.DirectionsParser;
-import com.jby.ride.others.DriverFoundDialog;
+import com.jby.ride.others.dialog.DriverFoundDialog;
+import com.jby.ride.others.dialog.DriverIsOtwDialog;
 import com.jby.ride.others.FetchAddressIntentService;
 import com.jby.ride.others.LocationConstants;
+import com.jby.ride.others.dialog.DriverPickUpDialog;
+import com.jby.ride.others.dialog.LocationRequestDialog;
+import com.jby.ride.others.dialog.RatingDialog;
 import com.jby.ride.others.SquareHeightLinearLayout;
 import com.jby.ride.profile.ProfileActivity;
 import com.jby.ride.registration.LoginActivity;
 import com.jby.ride.ride.RideActivity;
+import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
 import com.jby.ride.shareObject.AnimationUtility;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
 import com.jby.ride.sharePreference.SharedPreferenceManager;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,8 +101,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -112,7 +115,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener,
         NoteDialog.NoteDialogCallBack, InvalidTimeDialog.InvalidTimeDialogCallBack,
-        DriverFoundDialog.DriverFoundDialogCallBack{
+        DriverFoundDialog.DriverFoundDialogCallBack, PolylineObject.PolyLineCallBack,
+        RatingDialog.RatingDialogCallBack, DriverIsOtwDialog.DriverIsOtwDialogCallBack,
+        DriverPickUpDialog.DriverPickUpDialogCallBack, LocationRequestDialog.LocationRequestDialogCallBack {
 
     private DrawerLayout mainActivityDrawerLayout;
     private ActionBarDrawerToggle mainActivityActionBarDrawerToggle;
@@ -158,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     public static double minFare = 4.00;
     public static double farePerDistance = 0.25;
     public static double minDistance = 5.0;
-    private double finalFare = 4.00;
+    private double finalFare = 4;
     //    advance booking time & date setting
     Calendar mCurrentTime;
     TimePickerDialog timePicker;
@@ -182,6 +187,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     public static int UPDATE_PROFILE_REQUEST = 301;
     public static int UPDATE_COUNTER_REQUEST = 304;
     public static String TAG = "MainActivity";
+    //location permission purpose
+    public static int LOCATION_REQUEST = 500;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,16 +263,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         mainActivityFloatingButton.setOnClickListener(this);
 //    drawer
         mainActivityNavHeaderLayout.setOnClickListener(this);
-        initializeMap();
-        getUserInformation();
-        getNumPendingRide();
-        checkingDriverFoundDialogStatus();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
 
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (checkLocationPermission()) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)  == PackageManager.PERMISSION_GRANTED) {
+                        //Request location updates:
+                        initializeSetting();
+                    }
+                }
+            }
+        },200);
     }
+//if permission is granted then only run here
+    private void initializeSetting() {
+
+        checkLocationPermission();
+        initializeMap();
+        getUserInformation();
+        getNumPendingRide();
+        checkingDriverFoundStatus();
+        checkingBundleValue();
+        checkUserProfileGenderAndPhone();
+    }
+
+    private void checkingBundleValue() {
+        bundle = getIntent().getExtras();
+        if(bundle != null){
+            if(bundle.getString("driver_ride_id") != null)
+            {
+                String driverRideId = bundle.getString("driver_ride_id");
+                popOutDriverIsOnTheWayDialog(driverRideId);
+            }
+        }
+    }
+
 
     //<-----------------------------------Navigation Drawer-------------------------------------------------------->
     @Override
@@ -331,7 +370,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                         mainActivityUsername.setText(username);
 
                         if (profile_picture != null) {
-                            profile_picture = ProfileActivity.prefix + profile_picture;
+                            if(!profile_picture.substring(0, 8).equals("https://"))
+                                profile_picture = ProfileActivity.prefix + profile_picture;
 
                             Picasso.get()
                                     .load(profile_picture)
@@ -365,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     }
 
     //    snackBar setting
-    private void showSnackBar(String message) {
+    public void showSnackBar(String message) {
         final Snackbar snackbar = Snackbar.make(mainActivityMainLayout, message, Snackbar.LENGTH_SHORT);
         snackbar.setActionTextColor(getResources().getColor(R.color.blue));
         snackbar.setAction("Dismiss", new View.OnClickListener() {
@@ -375,6 +415,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
             }
         });
         snackbar.show();
+    }
+
+    @Override
+    public void refresh() {
+
     }
     //<-----------------------------------End of Navigation Drawer-------------------------------------------------------->
 
@@ -419,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                 break;
             case R.id.activity_main_nav_header:
                 clickEffect(mainActivityProfilePicture);
-                openProfileActivity();
+                openProfileActivity(false);
                 break;
             case R.id.activity_main_floating_button:
                 Intent intent = new Intent(this, RideActivity.class);
@@ -684,12 +729,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         }
 
         if(routeArray.size() == 2){
-            String url = getRequestDirection(routeArray.get(0).getLocation(), routeArray.get(1).getLocation());
-            requestDirection(url);
-            requestCameraFocus();
+/*            final String url = getRequestDirection(routeArray.get(0).getLocation(), routeArray.get(1).getLocation());
+            requestDirection(url);*/
+            new PolylineObject(this,
+                    routeArray.get(0).getLocation(),
+                    routeArray.get(1).getLocation(),
+                    this).requestDirection();
         }
     }
-//    setting after gettting drop off point
+
+    @Override
+    public void setPolylineOptions(PolylineOptions polylineOptions) {
+        if(polylineOptions != null){
+            googleMap.addPolyline(polylineOptions);
+        }
+    }
+
+    @Override
+    public void setDistanceAndDuration(String distance, String duration) {
+        setDistanceDuration(duration, distance);
+        calculateFare(distance);
+    }
+
+    @Override
+    public void dismiss() {
+        requestCameraFocus();
+    }
+
+    //    setting after gettting drop off point
     private void checkingDropOffPoint(){
         if (!mainActivityDropOffPoint.getText().equals("")){
 //            time setting
@@ -697,6 +764,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
 //            time
             hour = setTimeInto12HourFormat(mCurrentTime.get(Calendar.HOUR_OF_DAY));
             minute = mCurrentTime.get(Calendar.MINUTE);
+            if(minute + 10 >= 60)
+            {
+                minute = minute + 10 - 60;
+                hour++;
+            }
 //            date
             int dayOfMonth = mCurrentTime.get(Calendar.DAY_OF_MONTH);
             SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.getDefault());
@@ -705,7 +777,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
             String time_format = "%02d:%02d";
             String hourStatus = setAmOrPm(hour);
 
-            time = String.format(Locale.getDefault(),time_format, hour, minute + 10) +" "+hourStatus;
+            time = String.format(Locale.getDefault(),time_format, hour, minute) +" "+hourStatus;
             date = dayOfMonth + "/" + month;
 
             mainActivityDropOffIcon.setImageDrawable(getDrawable(R.drawable.activity_main_endpoint));
@@ -715,84 +787,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
 
             new AnimationUtility().fadeInVisible(this, mainActivityAdvanceSettingLayout);
             new AnimationUtility().fadeInVisible(this, mainActivityPriceLayout);
-        }
-    }
-// request direction from api
-    public void requestDirection(String url){
-
-        asyncTaskManager = new AsyncTaskManager(
-                this,
-                url,
-                new ApiManager().getResultParameter(
-                        "", "", ""
-                )
-        );
-        asyncTaskManager.execute();
-
-        if (!asyncTaskManager.isCancelled()) {
-            try {
-                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
-                if (jsonObjectLoginResponse != null) {
-                    List<List<HashMap<String, String>>> routes;
-                    DirectionsParser directionsParser = new DirectionsParser();
-                    ArrayList<LatLng> points;
-                    PolylineOptions polylineOptions = null;
-                    String distance = "";
-                    String duration = "";
-
-                    routes = directionsParser.parse(jsonObjectLoginResponse);
-                    // Traversing through all the routes
-                    for(int i=0;i<routes.size();i++){
-                        points = new ArrayList<LatLng>();
-                        polylineOptions = new PolylineOptions();
-
-                        // Fetching i-th route
-                        List<HashMap<String, String>> path = routes.get(i);
-
-                        // Fetching all the points in i-th route
-                        for(int j=0;j<path.size();j++){
-                            HashMap<String,String> point = path.get(j);
-
-                            if(j==0){    // Get distance from the list
-                                distance = (String)point.get("distance");
-                                continue;
-                            }else if(j==1){ // Get duration from the list
-                                duration = (String)point.get("duration");
-                                continue;
-                            }
-
-                            double lat = Double.parseDouble(point.get("lat"));
-                            double lng = Double.parseDouble(point.get("lng"));
-                            LatLng position = new LatLng(lat, lng);
-
-                            points.add(position);
-                        }
-                        // Adding all the points in the route to LineOptions
-                        polylineOptions.addAll(points);
-                        polylineOptions.width(15);
-                        polylineOptions.color(Color.BLACK);
-                        polylineOptions.geodesic(true);
-                    }
-
-                    if(polylineOptions != null){
-                        googleMap.addPolyline(polylineOptions);
-                        setDistanceDuration(duration, distance);
-                        calculateFare(distance);
-                    }
-                }
-                else{
-                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
-                }
-            }catch (InterruptedException e) {
-                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                Toast.makeText(this, "Execution Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }  catch (TimeoutException e) {
-                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
         }
     }
 
@@ -808,34 +802,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         googleMap.animateCamera(cu);
 
     }
-// getting direction path
-    private String getRequestDirection(LatLng origin, LatLng dest){
-        String pickUpPoint = "origin=" + origin.latitude +  "," + origin.longitude;
-        String dropOffPoint = "destination=" + dest.latitude +  "," + dest.longitude;
-        String sensor = "sensor=false";
-        String mode = "mode=driving";
-        String param = pickUpPoint + "&" + dropOffPoint + "&" + sensor +  "&" + mode;
-        String output = "json";
-        return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param;
-    }
 
     private void setDistanceDuration(String duration, String distance){
         mainActivityEstimateDuration.setText(duration);
         mainActivityEstimateDistance.setText(distance);
     }
-//    calcaulate fare
+//    calculatation fare
     private void calculateFare(String distance){
        String unit = distance.substring(distance.length() - 2);
-       DecimalFormat form = new DecimalFormat("0.00");
+       DecimalFormat form = new DecimalFormat("0");
 
        if(unit.equals("km")){
            String plainDistance = distance.substring(0, distance.length() - 2);
+           plainDistance = plainDistance.replace(",", "");
            double finalDistance = Double.parseDouble(plainDistance);
 
            if(finalDistance > minDistance){
                double extraDistance = finalDistance - minDistance;
                finalFare = (extraDistance * farePerDistance) + minFare;
-
                setFare(form.format(finalFare));
            }
            else{
@@ -848,6 +832,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     }
 //    set fare
     private void setFare(String fare){
+        fare = "RM " + fare;
         mainActivityTextViewPrice.setText(fare);
         mainActivityPriceLayout.setVisibility(View.VISIBLE);
     }
@@ -908,7 +893,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     public void selectTimeDialog(){
         mCurrentTime = Calendar.getInstance();
         hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
-        minute = mCurrentTime.get(Calendar.MINUTE);
+        minute = mCurrentTime.get(Calendar.MINUTE) + 10;
 
         timePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -921,10 +906,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                 String format = "%02d:%02d";
                 String hourStatus = setAmOrPm(selectedHour);
                 int editedHour = setTimeInto12HourFormat(selectedHour);
-                hour = selectedHour;
-
                 time = String.format(Locale.getDefault(),format, editedHour, selectedMinute) +" "+hourStatus;
                 mainActivityTextViewTime.setText(time);
+
+                hour = selectedHour;
+                minute = selectedMinute;
                 selected = true;
 
             }
@@ -935,14 +921,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
 
-                SimpleDateFormat sdf = new SimpleDateFormat("HHmm", Locale.TAIWAN);
+                SimpleDateFormat sdf = new SimpleDateFormat("HHmm", Locale.getDefault());
                 int currentTime = Integer.valueOf(sdf.format(new Date()));
                 int selectTime = Integer.valueOf(String.valueOf(hour) + String.valueOf( minute));
 
-//                if(selectTime - currentTime < 10 && selected){
-//                    dialogFragment = new InvalidTimeDialog();
-//                    dialogFragment.show(fm, "");
-//                }
+                if(selectTime - currentTime < 10 && selected){
+                    dialogFragment = new InvalidTimeDialog();
+                    dialogFragment.show(fm, "");
+                }
             }
         });
 
@@ -971,7 +957,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
 
     //<-----------------------------------booking setting-------------------------------------------------------->
     private void createUserRide(){
-
+        DecimalFormat form = new DecimalFormat("0");
         String pickUpLocation = String.valueOf(routeArray.get(0).getLocation());
         String dropOffLocation = String.valueOf(routeArray.get(1).getLocation());
         String pickUpAddress = String.valueOf(routeArray.get(0).getLocationAddress());
@@ -989,7 +975,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         apiDataObjectArrayList.add(new ApiDataObject("dateRide", date));
         apiDataObjectArrayList.add(new ApiDataObject("time", time));
         apiDataObjectArrayList.add(new ApiDataObject("note", note));
-        apiDataObjectArrayList.add(new ApiDataObject("fare", String.valueOf(finalFare)));
+        apiDataObjectArrayList.add(new ApiDataObject("fare", form.format(finalFare)));
 
         asyncTaskManager = new AsyncTaskManager(
                 this,
@@ -1059,8 +1045,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     //<-----------------------------------booking setting-------------------------------------------------------->
 
     //<-----------------------------------profile setting-------------------------------------------------------->
-    private void openProfileActivity(){
+    private void openProfileActivity(boolean askForUpdate){
         Intent intent = new Intent(this, ProfileActivity.class);
+        if(askForUpdate)
+            intent.putExtra("requestUpdate", true);
         startActivityForResult(intent, LOGOUT_REQUEST);
     }
     //<-----------------------------------end of profile setting-------------------------------------------------------->
@@ -1139,11 +1127,87 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         view.startAnimation(animation1);
     }
 
-    private void checkingDriverFoundDialogStatus(){
+    private void checkingDriverFoundStatus(){
         String matchRideId = SharedPreferenceManager.getMatchRideID(this);
         if(!matchRideId.equals("default"))
             popOutDriverFoundDialog(matchRideId);
     }
+    /*--------------------------------------------------------------------------permission purpose----------------------------------------------*/
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) initializeSetting();
+
+        else checkLocationPermission();
+    }
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission. ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission. ACCESS_FINE_LOCATION)) {
+                //open dialog
+                openLocationRequestDialog();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission. ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void openLocationRequestDialog(){
+        dialogFragment = new LocationRequestDialog();
+        dialogFragment.show(fm, "");
+    }
+
+    /*-----------------------------------------------------------checking user profile purpose---------------------------------------------------------*/
+    private void checkUserProfileGenderAndPhone(){
+
+        apiDataObjectArrayList = new ArrayList<>();
+        apiDataObjectArrayList.add(new ApiDataObject("user_id", SharedPreferenceManager.getUserID(this)));
+        apiDataObjectArrayList.add(new ApiDataObject("check_user_profile_info", "1"));
+        asyncTaskManager = new AsyncTaskManager(
+                this,
+                new ApiManager().userCreateRide,
+                new ApiManager().getResultParameter(
+                        "",
+                        new ApiManager().setData(apiDataObjectArrayList),
+                        ""
+                )
+        );
+        asyncTaskManager.execute();
+
+        if (!asyncTaskManager.isCancelled()) {
+            try {
+                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
+
+                if (jsonObjectLoginResponse != null) {
+                    if(jsonObjectLoginResponse.getString("status").equals("3")){
+                        openProfileActivity(true);
+                    }
+                }
+                else {
+                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (InterruptedException e) {
+                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                Toast.makeText(this, "Execution Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /*-----------------------------------------------------------------------broadcast purpose------------------------------------------------------*/
     @Override
     protected void onStart() {
         super.onStart();
@@ -1159,10 +1223,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String matchRideId = intent.getStringExtra("match_ride_id");
-            popOutDriverFoundDialog(matchRideId);
+            String id = intent.getStringExtra("id");
+            String matchRideId;
+            switch(id){
+                    //rating
+                case "3":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutRatingDialog(matchRideId);
+                    break;
+                    //driver found
+                case "4":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutDriverFoundDialog(matchRideId);
+                    break;
+                    //otw
+                case "5":
+                    String driverRideID = intent.getStringExtra("driver_ride_id");
+                    popOutDriverIsOnTheWayDialog(driverRideID);
+                    break;
+                    //pick up
+                case "7":
+                    matchRideId = intent.getStringExtra("match_ride_id");
+                    popOutDriverPickUpDialog(matchRideId);
+                    break;
+            }
         }
     };
+
+    @Override
+    public void acceptDriver() {
+        Intent intent = new Intent(this, RideActivity.class);
+        intent.putExtra("accept", "Accept");
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void redirectToStartRideActivity(String matchRideId) {
+        bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+        startActivity(new Intent(this, StartRouteActivity.class).putExtras(bundle));
+    }
+
     private void popOutDriverFoundDialog(String matchRideId){
         bundle = new Bundle();
         bundle.putString("match_ride_id", matchRideId);
@@ -1172,10 +1274,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         dialogFragment.show(fm, "");
     }
 
-    @Override
-    public void acceptDriver() {
-        Intent intent = new Intent(this, RideActivity.class);
-        intent.putExtra("accept", "Accept");
-        startActivity(intent);
+    private void popOutRatingDialog(String matchRideId){
+        bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        dialogFragment = new RatingDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    private void popOutDriverPickUpDialog(String matchRideId){
+        bundle = new Bundle();
+        bundle.putString("match_ride_id", matchRideId);
+
+        dialogFragment = new DriverPickUpDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
+    }
+
+    private void popOutDriverIsOnTheWayDialog(String driverRideID){
+        bundle = new Bundle();
+        bundle.putString("driver_ride_id", driverRideID);
+
+        dialogFragment = new DriverIsOtwDialog();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm, "");
     }
 }

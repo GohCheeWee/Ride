@@ -20,6 +20,10 @@ public class ApiManager {
     public String numPendingRide = domain + "/ride/frontend/user/ride/pending/pending_ride_counter.php";
 //    confirm ride
     public String confirmRide = domain + "/ride/frontend/user/ride/confirm/confirm_ride.php";
+    // rating
+    public String rating = domain + "/ride/frontend/user/rating/rating.php";
+    //past ride
+    public String pastRide = domain + "/ride/frontend/user/ride/past/past_ride.php";
 
     public String setData(ArrayList<ApiDataObject> apiDataObjectArrayList){
         String apiDataPost = "";

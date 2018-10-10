@@ -61,6 +61,7 @@ public class NoteDialog extends DialogFragment {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             d.getWindow().setLayout(width, height);
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            d.getWindow().setWindowAnimations(R.style.dialog_up_down);
         }
     }
 

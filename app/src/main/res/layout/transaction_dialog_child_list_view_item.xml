@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:id="@+id/divider"
+        android:background="@color/line_black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_below="@id/divider"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Top-Up"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:fontFamily="@string/font_family_condensed"
+            android:id="@+id/transaction_dialog_child_list_view_item_label"
+            android:padding="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Top-Up Successful"
+            android:fontFamily="@string/font_family_condensed"
+            android:layout_below="@id/transaction_dialog_child_list_view_item_label"
+            android:id="@+id/transaction_dialog_child_list_view_item_status"
+            android:textStyle="bold"
+            android:padding="5dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="80"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/green"
+                android:fontFamily="@string/font_family_condensed"
+                android:id="@+id/transaction_dialog_child_list_view_item_amount"
+                android:padding="5dp"/>
+
+            <com.jby.ride.others.SquareHeightLinearLayout
+                android:layout_width="match_parent"
+                android:padding="20dp"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/transaction_dialog_arrow_right_icon"
+                    android:layout_height="match_parent" />
+
+            </com.jby.ride.others.SquareHeightLinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

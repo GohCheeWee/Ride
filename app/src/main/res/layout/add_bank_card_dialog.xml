@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/add_bank_card_dialog_parent_layout"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_bank_card_dialog_card_number_input_layout"
+                android:layout_width="match_parent"
+                app:hintTextAppearance="@style/bank_card_dialog_custom_text_input_layout"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/add_bank_card_dialog_card_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="phone"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:maxLength="19"
+                    android:nextFocusDown="@+id/add_bank_card_dialog_expiry"
+                    android:theme="@style/bank_card_dialog_custom_edit_text"
+                    android:hint="@string/add_bank_card_dialog_hint_card_number"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.jby.ride.others.SquareHeightLinearLayout
+                android:layout_width="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:contentDescription="@string/app_name"
+                    android:id="@+id/add_bank_card_dialog_card_provider_icon"
+                    android:src="@drawable/bank_card_dialog_default_card_icon"
+                    />
+            </com.jby.ride.others.SquareHeightLinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:baselineAligned="false"
+            android:layout_height="?actionBarSize">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_bank_card_dialog_expiry_input_layout"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                app:hintTextAppearance="@style/bank_card_dialog_custom_text_input_layout"
+                android:layout_marginEnd="10dp"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/add_bank_card_dialog_expiry"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="phone"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:maxLength="5"
+                    android:nextFocusDown="@+id/add_bank_card_dialog_cvv"
+                    android:theme="@style/bank_card_dialog_custom_edit_text"
+                    android:hint="@string/add_bank_card_dialog_hint_expiry"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/add_bank_card_dialog_cvv_input_layout"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                app:hintTextAppearance="@style/bank_card_dialog_custom_text_input_layout"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/add_bank_card_dialog_cvv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"
+                    android:textSize="14sp"
+                    android:maxLength="3"
+                    android:textColor="@color/black"
+                    android:theme="@style/bank_card_dialog_custom_edit_text"
+                    android:hint="@string/add_bank_card_dialog_hint_cvv"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:fontFamily="@string/font_family_condensed"
+                android:textSize="16sp"
+                android:text="@string/add_bank_card_dialog_label_primary"/>
+
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:theme="@style/bank_card_dialog_custom_switch_compat"
+                android:id="@+id/add_bank_card_dialog_set_as_default_button"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/transparent_black"
+                android:textSize="14sp"
+                android:fontFamily="@string/font_family_condensed"
+                android:text="@string/add_bank_card_dialog_label_term_condition"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                android:fontFamily="@string/font_family_condensed"
+                android:text="@string/add_bank_card_dialog_label_term_condition_2"/>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/add_bank_card_dialog_save_button"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:text="@string/add_bank_card_dialog_save_button"
+            android:elevation="10dp"
+            android:background="@drawable/rating_dialog_custom_disable_button" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

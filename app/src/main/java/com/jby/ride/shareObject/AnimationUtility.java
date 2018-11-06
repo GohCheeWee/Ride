@@ -63,4 +63,14 @@ public class AnimationUtility {
         view.setVisibility(View.GONE);
     }
 
+    public void layoutSwipeDownIn(Context context, View view){
+        view.startAnimation(android.view.animation.AnimationUtils.loadAnimation(context, R.anim.layout_slide_in_down));
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public void layoutSwipeUpIn(Context context, View view){
+        view.startAnimation(android.view.animation.AnimationUtils.loadAnimation(context, R.anim.layout_slide_up_in));
+        view.setVisibility(View.VISIBLE);
+    }
+
 }

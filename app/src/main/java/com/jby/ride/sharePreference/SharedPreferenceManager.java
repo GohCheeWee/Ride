@@ -15,6 +15,7 @@ public class SharedPreferenceManager {
     private static String UserName = "userName";
     private static String DeviceToken = "deviceToken";
     private static String MatchRideID = "matchRideID";
+    private static String UserProfilePic = "userProfilePic";
 
     private static SharedPreferences getSharedPreferences(Context context) {
         String SharedPreferenceFileName = "MJTaiwanUserLoginSessionDetail";
@@ -67,6 +68,14 @@ public class SharedPreferenceManager {
 
     public static void setMatchRideID(Context context, String matchRideID) {
         getSharedPreferences(context).edit().putString(MatchRideID, matchRideID).apply();
+    }
+
+    public static String getUserProfilePic(Context context) {
+        return getSharedPreferences(context).getString(UserProfilePic, "default");
+    }
+
+    public static void setUserProfilePic(Context context, String userProfilePic) {
+        getSharedPreferences(context).edit().putString(UserProfilePic, userProfilePic).apply();
     }
 
 }

@@ -12,12 +12,14 @@ import android.widget.Toast;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.jby.ride.R;
+import com.jby.ride.database.DbChat;
 import com.jby.ride.home.MainActivity;
 import com.jby.ride.profile.ProfileActivity;
 import com.jby.ride.ride.RideActivity;
 import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
 import com.jby.ride.sharePreference.SharedPreferenceManager;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -114,6 +116,22 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                     //rider is successfully pick up
                     sendBroadCastToActivityWhenDriverIsPickUp(id);
                     break;
+                case "6":
+                    driverRideID = data.getJSONArray("content").getJSONObject(0).getString("driver_ride_id");
+                    String username = data.getJSONArray("content").getJSONObject(0).getString("senderName");
+                    String user_id = data.getJSONArray("content").getJSONObject(0).getString("senderID");
+                    String profile_pic = data.getJSONArray("content").getJSONObject(0).getString("senderProfilePicture");
+                    String messageContent = data.getJSONArray("content").getJSONObject(0).getString("message");
+                    String message_type = data.getJSONArray("content").getJSONObject(0).getString("message_type");
+                    String sendDate = data.getJSONArray("content").getJSONObject(0).getString("sendDate");
+                    String from = data.getJSONArray("content").getJSONObject(0).getString("sendFrom");
+                    String status = data.getJSONArray("content").getJSONObject(0).getString("status");
+
+                    boolean result = new DbChat(getApplicationContext()).saveChat(driverRideID, messageContent, username, user_id, profile_pic, message_type, sendDate, from, status);
+                    if(result){
+                        sendNewChatToActivity(data.getJSONArray("content"));
+                    }
+                    break;
                     default:
                         blankMessage = true;
                         break;
@@ -163,6 +181,7 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         intent.putExtra("match_ride_id", matchRideId);
         intent.putExtra("id", "4");
         broadcaster.sendBroadcast(intent);
+        Log.d("haha","haha: driver is found before broadcast" + matchRideId);
     }
 
     //driver otw
@@ -195,6 +214,13 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         intent.putExtra("longitude", longitude);
         intent.putExtra("latitude", latitude);
         intent.putExtra("id", "8");
+        broadcaster.sendBroadcast(intent);
+    }
+
+    private void sendNewChatToActivity(JSONArray message){
+        Intent intent = new Intent(NotificationBroadCast);
+        intent.putExtra("id", "9");
+        intent.putExtra("message_content", message.toString());
         broadcaster.sendBroadcast(intent);
     }
 

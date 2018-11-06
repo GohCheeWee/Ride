@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".wallet.WalletActivity">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_wallet_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:id="@+id/activity_wallet_tool_bar_layout"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="exitUntilCollapsed|scroll"
+            app:contentScrim="@color/black"
+            app:title="@string/app_name"
+            android:background="@drawable/activity_wallet_background">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent_black"/>
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:popupTheme="@color/white"
+                app:layout_collapseMode="pin">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:contentDescription="@string/app_name"
+                        android:id="@+id/activity_wallet_back_button"
+                        android:src="@drawable/actionbar_back"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:id="@+id/actionBar_title"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@string/cursive"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.Toolbar>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_marginBottom="?actionBarSize"
+                android:layout_marginTop="?actionBarSize">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:layout_toStartOf="@id/activity_wallet_balance"
+                    android:padding="5dp"
+                    android:text="@string/activity_wallet_label_balance"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    android:padding="10dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:id="@+id/activity_wallet_balance"
+                    android:layout_centerInParent="true"
+                    android:text="0.00"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:padding="10dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:id="@+id/activity_wallet_label_balance"
+                   android:layout_alignParentBottom="true"
+                    android:layout_below="@id/activity_wallet_balance"
+                    android:text="@string/activity_wallet_label_current_balance"/>
+
+            </RelativeLayout>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/activity_wallet_scroll_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_height="wrap_content">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_margin="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/activity_wallet_top_up_button"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp"
+                        android:layout_height="wrap_content">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/activity_wallet_top_up_icon"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/activity_wallet_label_top_up"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/line_black"
+                            android:layout_margin="10dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:text="@string/activity_wallet_label_explain_top_up"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_margin="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/activity_wallet_history_button"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/activity_wallet_history_icon"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/activity_wallet_label_history"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/line_black"
+                            android:layout_margin="10dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:text="@string/activity_wallet_label_explain_history"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+                
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="true"
+                android:orientation="horizontal">
+
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="0dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_margin="10dp"
+                    android:id="@+id/activity_wallet_bank_card_button"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:padding="5dp"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:contentDescription="@string/app_name"
+                            android:src="@drawable/activity_wallet_bank_card_icon"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:text="@string/activity_wallet_label_bank_card"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/line_black"
+                            android:layout_margin="10dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:text="@string/activity_wallet_label_explain_bank_card"/>
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

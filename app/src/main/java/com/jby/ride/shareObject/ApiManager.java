@@ -24,6 +24,14 @@ public class ApiManager {
     public String rating = domain + "/ride/frontend/user/rating/rating.php";
     //past ride
     public String pastRide = domain + "/ride/frontend/user/ride/past/past_ride.php";
+    //wallet
+    public String bankCard = domain + "/ride/frontend/user/wallet/bank_card/bank_card.php";
+    public String transaction = domain + "/ride/frontend/user/wallet/transaction/transaction.php";
+    //chat
+    public String chat = domain + "/ride/frontend/user/chat/chat.php";
+    //driver path
+    public static String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
+    public static String car_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_car/";
 
     public String setData(ArrayList<ApiDataObject> apiDataObjectArrayList){
         String apiDataPost = "";

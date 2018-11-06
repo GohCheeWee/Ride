@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class RatingDialog extends DialogFragment implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
     View rootView;
@@ -46,7 +47,7 @@ public class RatingDialog extends DialogFragment implements View.OnClickListener
     private TextView ratingDialogFare;
     private EditText ratingDialogComment;
     private Button ratingDialogSubmitButton;
-    private RatingBar ratingDialogRatingBar;
+    private MaterialRatingBar ratingDialogRatingBar;
     private LinearLayout ratingDialogParentLayout, ratingDialogProgressBarLayout;
     //    path
     private static String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
@@ -186,7 +187,7 @@ public class RatingDialog extends DialogFragment implements View.OnClickListener
         String comment = ratingDialogComment.getText().toString();
 
         apiDataObjectArrayList = new ArrayList<>();
-        apiDataObjectArrayList.add(new ApiDataObject("match_ride_id", "171"));
+        apiDataObjectArrayList.add(new ApiDataObject("match_ride_id", matchRideId));
         apiDataObjectArrayList.add(new ApiDataObject("rating", rating));
         apiDataObjectArrayList.add(new ApiDataObject("comment", comment));
 

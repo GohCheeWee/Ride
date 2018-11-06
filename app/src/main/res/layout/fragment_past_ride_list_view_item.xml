@@ -17,7 +17,7 @@
         android:id="@+id/fragment_past_ride_list_view_item_data_time"
         android:fontFamily="@string/font_family_condensed"
         android:padding="5dp"
-        android:gravity="end"
+        android:gravity="start"
         android:textSize="18sp"/>
 
     <View
@@ -46,15 +46,18 @@
             android:textColor="@color/black"
             android:fontFamily="@string/font_family_condensed"
             android:padding="5dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/fragment_past_ride_list_view_item_pick_up"
             android:gravity="center_vertical"
-            android:textSize="18sp"/>
+            android:textSize="14sp"/>
 
     </LinearLayout>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="10dp"
+        android:contentDescription="@string/app_name"
         android:layout_marginStart="5dp"
         android:src="@drawable/fragment_past_ride_dot_icon"/>
 
@@ -79,9 +82,11 @@
             android:textColor="@color/black"
             android:fontFamily="@string/font_family_condensed"
             android:padding="5dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/fragment_past_ride_list_view_item_drop_off"
             android:gravity="center_vertical"
-            android:textSize="18sp"/>
+            android:textSize="14sp"/>
 
     </LinearLayout>
 

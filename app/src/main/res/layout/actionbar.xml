@@ -65,4 +65,21 @@
 
     </com.jby.ride.others.SquareHeightLinearLayout>
 
+    <com.jby.ride.others.SquareHeightLinearLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/actionbar_wallet"
+        android:layout_alignParentEnd="true"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:src="@drawable/action_bar_wallet_icon"
+            android:contentDescription="@string/actionbar"/>
+
+    </com.jby.ride.others.SquareHeightLinearLayout>
+
 </RelativeLayout>

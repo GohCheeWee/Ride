@@ -17,7 +17,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1.5">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,10 +73,11 @@
                 android:padding="5dp"
                 android:layout_height="match_parent">
 
-                <RatingBar
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:layout_width="wrap_content"
                     android:numStars="5"
                     android:stepSize="1.0"
+                    style="@style/Widget.MaterialRatingBar.RatingBar"
                     android:progressTint="@color/red"
                     android:id="@+id/rating_dialog_rating_bar"
                     android:layout_height="wrap_content" />

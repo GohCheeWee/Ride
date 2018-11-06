@@ -3,34 +3,21 @@ package com.jby.ride.registration;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.jby.ride.home.MainActivity;
 import com.jby.ride.R;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
@@ -46,13 +33,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
-        GoogleApiClient.OnConnectionFailedListener{
+import static com.jby.ride.splashScreen.SplashScreenActivity.LOGIN_SUCCESSFULLY;
+
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText loginActivityEmail, loginActivityPassword;
     private TextView loginActivityForgotPassword;
     private ImageView loginActivityShowPassword, loginActivityCancelEmail;
     private LinearLayout loginActivityMainLayout;
-    private RelativeLayout loginActivityGoogleButton;
     private ProgressBar loginActivityProgressBar;
     private boolean show = true;
     AsyncTaskManager asyncTaskManager;
@@ -62,15 +49,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //    dialog
     DialogFragment dialogFragment;
     FragmentManager fm;
-    //google login
-    //google loging
-    private static final int RC_SIGN_IN = 1001;
-    private GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        isLogin();
         objectInitialize();
         objectSetting();
     }
@@ -87,42 +70,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginActivityMainLayout = (LinearLayout)findViewById(R.id.activity_login_main_layout);
         loginActivityProgressBar = (ProgressBar)findViewById(R.id.login_activity_progress_bar);
 
-        loginActivityGoogleButton = findViewById(R.id.activity_login_google_login_button);
-
         handler = new Handler();
         fm = getSupportFragmentManager();
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
     }
 
     private void objectSetting() {
         loginActivityShowPassword.setOnClickListener(this);
         loginActivityCancelEmail.setOnClickListener(this);
-        loginActivityGoogleButton.setOnClickListener(this);
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( this,  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                SharedPreferenceManager.setDeviceToken(LoginActivity.this, newToken);
-                Log.e("newToken",newToken);
-            }
-        });
-
     }
 
     public void signUp(View view){
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void closeKeyBoard(){
@@ -140,9 +100,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.activity_login_cancel_email:
                 loginActivityEmail.setText("");
-                break;
-            case R.id.activity_login_google_login_button:
-                googleSignIn();
                 break;
         }
     }
@@ -271,9 +228,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                              loginSuccess();
                             }
                         },200);
                     }
@@ -319,100 +274,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         dialogFragment.show(fm, "");
     }
 
-//    if login then redirect
-    private void isLogin(){
-        if(!SharedPreferenceManager.getUserID(this).equals("default")){
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-    /*-----------------------------------------------------------------------google login purpose-------------------------------------------------------*/
-    private void googleSignIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        showSnackBar("Something Went Wrong :(");
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            if (acct != null) {
-                String googleUserImage = "";
-                String googleUserName = acct.getDisplayName();
-                String googleUserEmail = acct.getEmail();
-                if(acct.getPhotoUrl() != null)
-                    googleUserImage = String.valueOf(acct.getPhotoUrl());
-                signInWithGoogle(googleUserEmail, googleUserName, googleUserImage);
-            }
-        }else{
-            showSnackBar("Something Went Wrong :(");
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-
-    public void signInWithGoogle(String email, String username, String imagePath){
-        apiDataObjectArrayList = new ArrayList<>();
-        apiDataObjectArrayList.add(new ApiDataObject("username", username));
-        apiDataObjectArrayList.add(new ApiDataObject("email", email));
-        apiDataObjectArrayList.add(new ApiDataObject("google", "1"));
-        apiDataObjectArrayList.add(new ApiDataObject("image_path", imagePath));
-
-        asyncTaskManager = new AsyncTaskManager(
-                this,
-                new ApiManager().login,
-                new ApiManager().getResultParameter(
-                        "",
-                        new ApiManager().setData(apiDataObjectArrayList),
-                        ""
-                )
-        );
-        asyncTaskManager.execute();
-
-        if (!asyncTaskManager.isCancelled()) {
-            try {
-                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
-
-                if (jsonObjectLoginResponse != null) {
-                    if (jsonObjectLoginResponse.getString("status").equals("1")) {
-//                        setup user detail
-                        whenLoginSuccessful(jsonObjectLoginResponse);
-
-                    }
-                    else if(jsonObjectLoginResponse.getString("status").equals("2")){
-                        showSnackBar("Invalid email or password");
-                        loginActivityProgressBar.setVisibility(View.GONE);
-                    }
-                }
-                else {
-                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
-                }
-            } catch (InterruptedException e) {
-                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                Toast.makeText(this, "Execution Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (JSONException e) {
-                Toast.makeText(this, "JSON Exception!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (TimeoutException e) {
-                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-        }
+    private void loginSuccess(){
+        setResult(LOGIN_SUCCESSFULLY);
+        onBackPressed();
     }
 }

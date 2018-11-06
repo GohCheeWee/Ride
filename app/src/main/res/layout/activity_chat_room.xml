@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/add_bank_account_dialog_parent_layout"
+    android:background="@color/white"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"/>
+
+    <ExpandableListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/actionbar"
+        android:groupIndicator="@color/transparent"
+        android:layout_above="@id/chat_room_dialog_send_layout"
+        android:id="@+id/chat_room_dialog_list_view"/>
+
+    <LinearLayout
+        android:id="@+id/chat_room_dialog_send_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/background_white"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/chat_room_dialog_custom_linear_layout"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/chat_room_dialog_message_field"
+                android:background="@android:color/transparent"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="14sp"
+                android:inputType="textEmailAddress"
+                android:hint="@string/chat_room_dialog_hint_message"
+                android:maxLines="6"/>
+
+            <com.jby.ride.others.SquareHeightLinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/chat_room_dialog_send_button"
+                android:clickable="false"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/chat_room_dialog_disable_send_icon"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:id="@+id/chat_room_dialog_send_button_icon"
+                    android:contentDescription="@string/app_name"
+                    android:layout_gravity="bottom" />
+
+            </com.jby.ride.others.SquareHeightLinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chat_room_dialog_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>
+
+

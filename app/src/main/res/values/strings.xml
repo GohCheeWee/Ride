@@ -29,6 +29,7 @@
     <string name="activity_main_close">Close</string>
     <string name="activity_main_menu_1">RidePay</string>
     <string name="activity_main_menu_2">Trip</string>
+    <string name="activity_main_menu_6">Inbox</string>
     <string name="activity_main_menu_3">Emergency</string>
     <string name="activity_main_menu_4">Help Centre</string>
     <string name="activity_main_menu_5">Drive with Ride</string>
@@ -66,6 +67,7 @@
     <string name="edit_profile_dialog_label_logout">LOGOUT</string>
     <string name="edit_profile_dialog_title">Profile</string>
     <string name="edit_profile_dialog_label_edit">EDIT PROFILE</string>
+    <string name="activity_profile_label_completed_ride">Completed Ride</string>
     <string name="activity_profile_rating">Rating</string>
     <string name="edit_profile_dialog_gender">Gender</string>
     <!--profile upload photo dialog-->
@@ -81,7 +83,7 @@
     <string name="fragment_confirm_ride_label_no_upcoming_trip">No upcoming trips</string>
     <string name="fragment_confirm_ride_button">Create route</string>
     <string name="fragment_pending_ride_label_no_pending">No pending trips</string>
-    <string name="fragment_pending_ride_label_no_history">No completed trips</string>
+
     <string name="fragment_pending_ride_label_waiting_for_driver">Waiting for driver to accept</string>
     <string name="fragment_pending_ride_label_start" />
 
@@ -149,5 +151,88 @@
     <string name="location_request_dialog_title">Location Request</string>
     <string name="location_request_dialog_content">In order to get your current location and better user experience, you have to enable your location permission.</string>
     <string name="location_request_dialog_enable_button">Enable</string>
-    <string name="activity_profile_label_completed_ride">Completed Ride</string>
+
+
+    <string name="activity_past_ride_detail_label_booking_number">Booking No</string>
+    <string name="activity_past_ride_detail_label_fare">Fare:</string>
+    <string name="activity_past_ride_detail_payment_method">RidePay</string>
+    <string name="activity_past_ride_detail_label_rating">Rating for this ride</string>
+    <string name="activity_past_ride_detail_label_comment">Comment</string>
+    <string name="fragment_pending_ride_label_no_history">No completed trips</string>
+
+    <string name="past_ride_detail_dialog_hint_comment">No comment is given</string>
+
+    <string name="activity_wallet_label_balance">RM</string>
+    <string name="activity_wallet_label_current_balance">Current Balance</string>
+    <string name="activity_wallet_label_top_up">Top Up</string>
+    <string name="activity_wallet_label_explain_top_up">Top up money into your RidePay</string>
+    <string name="activity_wallet_label_withdraw">Withdraw</string>
+    <string name="activity_wallet_label_explain_withdraw">Transfer money to your account</string>
+    <string name="activity_wallet_label_history">History</string>
+    <string name="activity_wallet_label_explain_history">Check your RidePay transaction history</string>
+    <string name="activity_wallet_label_bank_card">Bank Cards</string>
+    <string name="activity_wallet_label_explain_bank_card">Link your bank cards with RidePay</string>
+
+    <string name="activity_splash_screen_label_slogan_1">It\'s good day to</string>
+    <string name="activity_splash_screen_label_slogan_2">Have A good</string>
+    <string name="activity_splash_screen_label_developer">Power By Ride</string>
+    <string name="activity_splash_screen_label_divier">OR</string>
+    <string name="activity_splash_screen_sign_In_with_account_button">Sign In With Email</string>
+
+    <string name="bank_card_dialog_label_add_bank_card">Add a Bank Card</string>
+    <string name="bank_card_dialog_title">Add Card</string>
+    <string name="bank_card_dialog_label_not_found">No Bank Card Is Found</string>
+
+    <string name="add_bank_card_dialog_title">Add Card</string>
+    <string name="add_bank_card_dialog_hint_card_number">Card number</string>
+    <string name="add_bank_card_dialog_hint_expiry">Expiry (mm/yy)</string>
+    <string name="add_bank_card_dialog_hint_cvv">CVV</string>
+    <string name="add_bank_card_dialog_label_primary">Set as primary</string>
+    <string name="add_bank_card_dialog_label_term_condition"><![CDATA[By adding your debit/credit card, you agree to the]]></string>
+    <string name="add_bank_card_dialog_label_term_condition_2"><u>Terms conditions</u></string>
+    <string name="add_bank_card_dialog_save_button">Save</string>
+
+    <string name="set_default_bank_card_dialog_title">Change This Card As Primary</string>
+    <string name="set_default_bank_card_dialog_contenxt">Are you sure that you want to set this card as primary?  *All the transaction will based on the primary card as first priority.</string>
+    <string name="set_default_bank_card_dialog_confirm_button">Confirm</string>
+    <string name="set_default_bank_card_dialog_cancel_button">No, Thanks</string>
+
+    <string name="top_up_dialog_label_bank_card">Bank Card</string>
+    <string name="top_up_dialog_label_top_up_amount">Top-up Amount</string>
+    <string name="top_up_dialog_title">Top Up</string>
+    <string name="top_up_dialog_label_unit_amount">RM</string>
+    <string name="top_up_dialog_label_user_limit">Current balance limit for users is RM200</string>
+    <string name="top_up_dialog_label_when_reach_maximum">Your amount already exceed the limit</string>
+    <string name="top_up_dialog_next_button">Next</string>
+
+    <string name="withdraw_dialog_label_withdraw_amount">Withdrawal Amount</string>
+    <string name="withdraw_dialog_label_balance">Balance</string>
+    <string name="withdraw_dialog_withdraw_all">Withdraw All</string>
+    <string name="withdraw_dialog_button_withdraw">Withdraw</string>
+    <string name="withdraw_dialog_withdraw_instuction">Funds will be credited into the account within two business day.</string>
+
+    <string name="transation_dialog_title">Transactions</string>
+    <string name="transaction_dialog_label_not_found">No transaction</string>
+
+    <string name="transaction_detail_dialog_label_unit_amount">RM</string>
+    <string name="transaction_detail_dialog_label_top_up_method">Top up using</string>
+    <string name="transaction_detail_dialog_label_withdraw_method">Withdraw using</string>
+    <string name="transaction_detail_dialog_label_date">Date and time</string>
+    <string name="transaction_detail_dialog_label_transaction_id">Transaction ID</string>
+    <string name="transaction_detail_dialog_title">Transaction Details</string>
+    <string name="transaction_detail_dialog_top_up_status">You\'ve topped up</string>
+    <string name="transaction_detail_dialog_withdraw_status">You\'ve withdrawn up</string>
+    <string name="transaction_detail_dialog_label_received_method">Payment Made By</string>
+    <string name="transaction_detail_dialog_label_earn_method">You\'ve paid </string>
+
+
+    <string name="balance_not_enough_dialog_label">Low Balance</string>
+    <string name="balance_not_enough_dialog_content">Sorry, your current balance is not enough for this ride. Please top up your balance otherwise choose cash as payment way :)</string>
+    <string name="balance_not_enough_dialog_top_up_button">Top-Up Now</string>
+    <string name="balance_not_enough_dialog_use_cash_button">Select Cash</string>
+
+    <string name = "activity_chat_label_not_found">No Inbox Is Found</string>
+    <string name = "activity_chat_title">Inbox</string>
+
+    <string name="chat_room_dialog_hint_message">Enter your message here</string>
 </resources>

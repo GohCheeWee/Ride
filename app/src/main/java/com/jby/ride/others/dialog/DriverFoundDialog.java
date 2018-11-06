@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -38,6 +37,9 @@ import java.util.concurrent.TimeoutException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.jby.ride.shareObject.ApiManager.car_prefix;
+import static com.jby.ride.shareObject.ApiManager.profile_prefix;
+
 public class DriverFoundDialog extends DialogFragment implements View.OnClickListener {
     View rootView;
     private TextView driverFoundDialogDriver, driverFoundDialogRating, driverFoundDialogCompletedRide;
@@ -48,10 +50,6 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
     private ProgressBar driverFoundDialogProgressBar;
     private LinearLayout driverFoundDialogMainLayout, driverFoundDialogParentLayout;
     private RelativeLayout driverFoundDialogPictureParentLayout;
-
-    //    path
-    private static String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
-    private static String car_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_car/";
 
     //    async purpose
     AsyncTaskManager asyncTaskManager;
@@ -108,6 +106,7 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
         SharedPreferenceManager.setMatchRideID(getActivity(), "default");
         driverFoundDialogConfirmButton.setOnClickListener(this);
         driverFoundDialogCancelButton.setOnClickListener(this);
+        driverFoundDialogCancelIcon.setOnClickListener(this);
         Bundle mArgs = getArguments();
         if (mArgs != null) {
             matchRideID = mArgs.getString("match_ride_id");
@@ -355,6 +354,15 @@ public class DriverFoundDialog extends DialogFragment implements View.OnClickLis
                 },200);
                 break;
             case R.id.driver_found_dialog_cancel_button:
+                driverFoundDialogProgressBar.setVisibility(View.VISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        rejectDriverRequest();
+                    }
+                },200);
+                break;
+            case R.id.driver_found_dialog_cancel_icon:
                 driverFoundDialogProgressBar.setVisibility(View.VISIBLE);
                 handler.postDelayed(new Runnable() {
                     @Override

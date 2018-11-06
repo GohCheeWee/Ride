@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/transparent_black"
+    android:gravity="center"
+    android:padding="20dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:background="@drawable/something_missing_dialog_custom_background"
+        android:padding="20dp"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:src="@drawable/set_default_bank_card_dialog_card_icon"
+            android:id="@+id/driver"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/set_default_bank_card_dialog_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/set_default_bank_card_dialog_contenxt"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/set_default_bank_card_dialog_confirm_button"
+            android:background="@drawable/activity_login_custom_button"
+            android:fontFamily="@string/font_family_condensed"
+            android:id="@+id/set_default_bank_card_dialog_confirm_button"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/red"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:id="@+id/set_default_bank_card_dialog_cancel_button"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/set_default_bank_card_dialog_cancel_button"/>
+    </LinearLayout>
+
+</LinearLayout>
+
+

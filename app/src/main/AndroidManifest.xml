@@ -9,8 +9,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -20,11 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <service
             android:name=".others.FetchAddressIntentService"
             android:exported="false" />
-
         <service
             android:name=".others.MyFireBaseMessagingService"
             android:exported="false">
@@ -36,7 +34,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/activity_login_cancel_icon" />
@@ -46,22 +43,14 @@
             android:name=".registration.LoginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".registration.RegisterActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity
             android:name=".profile.ProfileActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
@@ -69,6 +58,8 @@
         <activity
             android:name=".ride.pending.pendingDetail.PendingRideDetailActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <activity android:name=".chat.ChatActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -80,8 +71,21 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ride.comfirm.startRoute.StartRouteActivity"/>
+        <activity android:name=".ride.comfirm.startRoute.StartRouteActivity" />
+        <activity android:name=".ride.past.pastDetail.PastRideDetailActivity" />
+        <activity android:name=".wallet.WalletActivity" />
+        <activity android:name=".splashScreen.SplashScreenActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".chat.chatRoom.ChatRoomActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
     </application>
 
 </manifest>

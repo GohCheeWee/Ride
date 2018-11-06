@@ -38,7 +38,7 @@ import static com.jby.ride.others.MyFireBaseMessagingService.NotificationBroadCa
 public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener,
         View.OnClickListener,  DriverFoundDialog.DriverFoundDialogCallBack, RatingDialog.RatingDialogCallBack,
         DriverIsOtwDialog.DriverIsOtwDialogCallBack {
-    private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon, actionBarLogout;
+    private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon;
     private TextView actionBarTitle;
 
     private FrameLayout rideActivityFrameLayout;
@@ -69,7 +69,6 @@ public class RideActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void objectInitialize() {
         actionBarMenuIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_menu);
         actionBarCloseIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_close);
-        actionBarLogout = (SquareHeightLinearLayout)findViewById(R.id.actionbar_logout);
         actionBarTitle = (TextView)findViewById(R.id.actionBar_title);
 
         rideActivityFrameLayout = (FrameLayout)findViewById(R.id.activity_ride_frame_layout);

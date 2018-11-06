@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/add_bank_account_dialog_parent_layout"
+    android:background="@color/white"
+    android:padding="10dp"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_room_dialog_custom_send_text_view"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:id="@+id/chat_room_dialog_send_view_message"
+        android:layout_alignParentEnd="true"
+        android:fontFamily="@string/font_family_condensed"
+        android:gravity="start"
+        android:text="HAHA!!" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/transparent_black"
+        android:padding="10dp"
+        android:textSize="12sp"
+        android:id="@+id/chat_room_dialog_send_view_date"
+        android:fontFamily="@string/font_family_condensed"
+        android:layout_toStartOf="@id/chat_room_dialog_send_view_message"
+        android:text="4:28pm" />
+
+</RelativeLayout>
+
+

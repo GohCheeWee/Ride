@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.jby.ride.R;
 import com.jby.ride.others.CustomListView;
+import com.jby.ride.ride.past.pastDetail.PastRideDetailDialog;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
@@ -232,7 +235,14 @@ public class PastRideFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        DialogFragment dialogFragment = new PastRideDetailDialog();
+        FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("match_ride_id", pastRideObjectArrayList.get(i).getId());
+
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm , "");
     }
     //click effect
     public void clickEffect(View view){

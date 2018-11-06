@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/activity_splash_screen_main_layout"
+    android:background="@drawable/splash_screen_activity_background"
+    tools:context=".splashScreen.SplashScreenActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/transparent_black"
+        android:orientation="vertical"
+        android:padding="40dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/casual"
+            android:gravity="center"
+            android:text="@string/activity_splash_screen_label_slogan_1"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/casual"
+            android:gravity="center"
+            android:text="@string/activity_splash_screen_label_slogan_2"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/cursive"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="45sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent_black"
+        android:visibility="gone"
+        android:id="@+id/activity_splash_screen_background_filter"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:orientation="vertical"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="5dp"
+        android:id="@+id/activity_splash_screen_button_layout"
+        android:visibility="gone"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/activity_splash_screen_google_login_button"
+            android:layout_above="@id/activity_splash_screen_divider_layout"
+            android:layout_height="?actionBarSize">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:textColorHint="#80ffffff"
+                android:gravity="center"
+                android:text="@string/activity_login_sign_in_by_google"
+                android:background="@drawable/activity_login_edit_google_button"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                android:fontFamily="@string/font_family_condensed"
+                android:layout_height="match_parent" />
+
+            <com.jby.ride.others.SquareHeightLinearLayout
+                android:layout_width="20dp"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:padding="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_centerInParent="true"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:src="@drawable/activity_login_google_icon"
+                    android:contentDescription="@string/app_name"
+                    android:layout_height="match_parent" />
+
+            </com.jby.ride.others.SquareHeightLinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/activity_splash_screen_divider_layout"
+            android:gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_above="@id/activity_splash_screen_login_with_account_button"
+            android:layout_height="?actionBarSize">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/tranparent_white"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/activity_splash_screen_label_divier"
+                android:textColor="@color/white"
+                android:layout_weight="0.5"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/tranparent_white"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_above="@id/activity_splash_screen_label_developer"
+            android:background="@drawable/activity_splash_screen_custom_button"
+            android:id="@+id/activity_splash_screen_login_with_account_button"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/activity_splash_screen_sign_In_with_account_button"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/casual"
+            android:text="@string/activity_splash_screen_label_developer"
+            android:textColor="@color/tranparent_white"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:layout_marginTop="5dp"
+            android:id="@+id/activity_splash_screen_label_developer"
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

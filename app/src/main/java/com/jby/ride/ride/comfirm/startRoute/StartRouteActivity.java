@@ -47,6 +47,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jby.ride.Object.MarkerObject;
 import com.jby.ride.R;
+import com.jby.ride.chat.chatRoom.ChatRoomActivity;
+import com.jby.ride.database.DbChat;
 import com.jby.ride.others.CustomMarker;
 import com.jby.ride.others.SquareHeightLinearLayout;
 import com.jby.ride.ride.RideActivity;
@@ -55,6 +57,7 @@ import com.jby.ride.shareObject.AnimationUtility;
 import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
+import com.jby.ride.sharePreference.SharedPreferenceManager;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -74,21 +77,21 @@ import static com.jby.ride.others.MyFireBaseMessagingService.NotificationBroadCa
 public class StartRouteActivity extends AppCompatActivity implements View.OnClickListener,
         OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener,
-        CompletedRouteDialog.CompletedRouteDialogCallBack{
+        CompletedRouteDialog.CompletedRouteDialogCallBack {
     private SquareHeightLinearLayout actionBarMenuIcon, actionBarCloseIcon, actionBarLogout;
     private TextView actionBarTitle;
 
     private MapFragment map;
-    private TextView startRouteActivityStatus, startRouteActivityCarPlate,  startRouteActivityCarModel;
-    private TextView  startRouteActivityDriverName, startRouteActivivtyMovingText;
-    private ImageView  startRouteActivityCall,  startRouteActivityMessage;
-    private CircleImageView  startRouteActivityDriverProfilePicture;
+    private TextView startRouteActivityStatus, startRouteActivityCarPlate, startRouteActivityCarModel;
+    private TextView startRouteActivityDriverName, startRouteActivivtyMovingText;
+    private ImageView startRouteActivityCall, startRouteActivityMessage;
+    private CircleImageView startRouteActivityDriverProfilePicture;
 
     private String matchedRideId, status, driverPhoneNumber;
     private String pickUpLocation, dropOffLocation;
     private String pickUpAddress, dropOffAddress;
     private Location currentLocation;
-//    update purpose
+    //    update purpose
     private int requestCode;
     //    path
     private static String profile_prefix = "http://188.166.186.198/~cheewee/ride/frontend/driver/profile/driver_profile_picture/";
@@ -102,9 +105,12 @@ public class StartRouteActivity extends AppCompatActivity implements View.OnClic
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private ArrayList<MarkerObject> markerObjectArrayList;
-//    fragment purpose
+    //    fragment purpose
     private DialogFragment dialogFragment;
     private FragmentManager fm;
+    //for chat purpose
+    private String driverRideID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,24 +120,24 @@ public class StartRouteActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void objectInitialize() {
-        actionBarMenuIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_menu);
-        actionBarCloseIcon = (SquareHeightLinearLayout)findViewById(R.id.actionbar_close);
-        actionBarLogout = (SquareHeightLinearLayout)findViewById(R.id.actionbar_logout);
-        actionBarTitle = (TextView)findViewById(R.id.actionBar_title);
+        actionBarMenuIcon = (SquareHeightLinearLayout) findViewById(R.id.actionbar_menu);
+        actionBarCloseIcon = (SquareHeightLinearLayout) findViewById(R.id.actionbar_close);
+        actionBarLogout = (SquareHeightLinearLayout) findViewById(R.id.actionbar_logout);
+        actionBarTitle = (TextView) findViewById(R.id.actionBar_title);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_start_route_google_map));
 
-        startRouteActivityStatus = (TextView)findViewById(R.id.activity_start_route_status);
-        startRouteActivityCarPlate = (TextView)findViewById(R.id.activity_start_route_car_plate);
-        startRouteActivityCarModel = (TextView)findViewById(R.id.activity_start_route_car_model);
-        startRouteActivityDriverName = (TextView)findViewById(R.id.acitvity_start_route_driver_name);
+        startRouteActivityStatus = (TextView) findViewById(R.id.activity_start_route_status);
+        startRouteActivityCarPlate = (TextView) findViewById(R.id.activity_start_route_car_plate);
+        startRouteActivityCarModel = (TextView) findViewById(R.id.activity_start_route_car_model);
+        startRouteActivityDriverName = (TextView) findViewById(R.id.acitvity_start_route_driver_name);
         startRouteActivivtyMovingText = findViewById(R.id.activity_start_route_moving_text);
 
-        startRouteActivityCall = (ImageView)findViewById(R.id.activity_start_route_call_icon);
-        startRouteActivityMessage = (ImageView)findViewById(R.id.activity_start_route_message_icon);
+        startRouteActivityCall = (ImageView) findViewById(R.id.activity_start_route_call_icon);
+        startRouteActivityMessage = (ImageView) findViewById(R.id.activity_start_route_message_icon);
 
-        startRouteActivityStatus = (TextView)findViewById(R.id.activity_start_route_status);
-        startRouteActivityDriverProfilePicture = (CircleImageView)findViewById(R.id.activity_start_route_driver_icon);
+        startRouteActivityStatus = (TextView) findViewById(R.id.activity_start_route_status);
+        startRouteActivityDriverProfilePicture = (CircleImageView) findViewById(R.id.activity_start_route_driver_icon);
         handler = new Handler();
         fm = getSupportFragmentManager();
         markerObjectArrayList = new ArrayList<>();
@@ -149,16 +155,68 @@ public class StartRouteActivity extends AppCompatActivity implements View.OnClic
         startRouteActivivtyMovingText.setSelected(true);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle != null){
+        if (bundle != null) {
             matchedRideId = bundle.getString("match_ride_id");
         }
-
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getDriverRideId();
+            }
+        }, 200);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 getDriverDetail();
             }
-        },200);
+        }, 200);
+    }
+
+    private void getDriverRideId(){
+        apiDataObjectArrayList = new ArrayList<>();
+        apiDataObjectArrayList.add(new ApiDataObject("match_ride_id", matchedRideId));
+
+        asyncTaskManager = new AsyncTaskManager(
+                this,
+                new ApiManager().confirmRide,
+                new ApiManager().getResultParameter(
+                        "",
+                        new ApiManager().setData(apiDataObjectArrayList),
+                        ""
+                )
+        );
+        asyncTaskManager.execute();
+
+        if (!asyncTaskManager.isCancelled()) {
+            try {
+                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
+
+                if (jsonObjectLoginResponse != null) {
+                    if(jsonObjectLoginResponse.getString("status").equals("1")){
+                        driverRideID = jsonObjectLoginResponse.getString("driver_ride_id");
+                    }
+                    else if(jsonObjectLoginResponse.getString("status").equals("2")){
+                        Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (InterruptedException e) {
+                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                Toast.makeText(this,"Execution Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
     }
 
     //<-----------------------------------Map and  GPS setting-------------------------------------------------------->
@@ -228,18 +286,27 @@ public class StartRouteActivity extends AppCompatActivity implements View.OnClic
         //Place current location marker
         if (mGoogleApiClient != null) {
             currentLocation = location;
-            if(status.equals("5")){
+            if (status.equals("5")) {
                 setUpMarkerWhenGoingDestination();
             }
         }
     }
 
 
-
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        if(mGoogleApiClient != null){
+        if (mGoogleApiClient != null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
     }
@@ -538,6 +605,20 @@ public class StartRouteActivity extends AppCompatActivity implements View.OnClic
             case R.id.activity_start_route_call_icon:
                 phoneCallPermission();
                 break;
+            case R.id.activity_start_route_message_icon:
+                openChatRoom();
+                break;
+        }
+    }
+
+    private void openChatRoom(){
+        if (new DbChat(getApplicationContext()).updateChatStatusWhenClick(driverRideID)) {
+            Intent intent = new Intent(this, ChatRoomActivity.class);
+            Bundle bundle = new Bundle();
+
+            bundle.putString("driver_ride_id", driverRideID);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
     }
 

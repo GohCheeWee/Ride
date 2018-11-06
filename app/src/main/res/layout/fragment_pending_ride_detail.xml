@@ -79,7 +79,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <TextView
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:text=""
                     android:textColor="#000000"
@@ -116,7 +116,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <TextView
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:text=""
                     android:textColor="#000000"
@@ -153,7 +153,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <EditText
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:text=""
                     android:inputType="text"
@@ -191,7 +191,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <EditText
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:text=""
                     android:inputType="text"
@@ -229,7 +229,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <EditText
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:text=""
                     android:inputType="text"
@@ -266,7 +266,7 @@
                 </com.jby.ride.others.SquareHeightLinearLayout>
 
                 <EditText
-                    android:background="@drawable/activity_profile_custom_edit_text"
+                    android:background="@drawable/fragment_pending_custom_edit_text"
                     android:layout_width="match_parent"
                     android:inputType="text"
                     android:textColor="#000000"

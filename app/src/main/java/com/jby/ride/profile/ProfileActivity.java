@@ -23,7 +23,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -272,21 +271,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editTextProfileDialogEmail.setText(email);
         editTextProfileDialogMobile.setText(phone);
         editProfileNumCompleteRide.setText(completeRide);
-        if(profile_picture != null){
+        if(!profile_picture.equals("")){
             if(!profile_picture.substring(0, 8).equals("https://"))
                 profile_picture = prefix + profile_picture;
 
             Picasso.get()
                     .load(profile_picture)
-                    .error(R.drawable.loading_gif)
+                    .error(R.drawable.acitivty_main_user)
                     .into(editProfileDialogPicture);
 
             Picasso.get()
                     .load(profile_picture)
-                    .error(R.drawable.loading_gif)
+                    .error(R.drawable.acitivty_main_user)
                     .into(editProfileBackgroundImage);
 
-            editProfileBackgroundImage.setBlur(5);
+            if(editProfileBackgroundImage.getDrawable() != null)
+                editProfileBackgroundImage.setBlur(5);
         }
 
         this.gender = gender;
@@ -344,6 +344,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 {
                     Bitmap croppedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), croppedUrl);
                     editProfileDialogPicture.setImageBitmap(croppedImage);
+                    editProfileBackgroundImage.setImageBitmap(croppedImage);
+
                     imageCode = encodeToBase64(getResizedBitmap(croppedImage, 500));
 
                 }

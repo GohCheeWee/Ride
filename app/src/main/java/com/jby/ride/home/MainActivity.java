@@ -27,7 +27,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,11 +35,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -70,6 +74,8 @@ import com.jby.ride.Object.AddressObject;
 import com.jby.ride.Object.MarkerObject;
 import com.jby.ride.Object.PolylineObject;
 import com.jby.ride.R;
+import com.jby.ride.chat.ChatActivity;
+import com.jby.ride.home.dialog.BalanceNotEnoughDialog;
 import com.jby.ride.home.dialog.InvalidTimeDialog;
 import com.jby.ride.home.dialog.NoteDialog;
 import com.jby.ride.others.CustomMarker;
@@ -82,7 +88,6 @@ import com.jby.ride.others.dialog.LocationRequestDialog;
 import com.jby.ride.others.dialog.RatingDialog;
 import com.jby.ride.others.SquareHeightLinearLayout;
 import com.jby.ride.profile.ProfileActivity;
-import com.jby.ride.registration.LoginActivity;
 import com.jby.ride.ride.RideActivity;
 import com.jby.ride.ride.comfirm.startRoute.StartRouteActivity;
 import com.jby.ride.shareObject.AnimationUtility;
@@ -90,8 +95,10 @@ import com.jby.ride.shareObject.ApiDataObject;
 import com.jby.ride.shareObject.ApiManager;
 import com.jby.ride.shareObject.AsyncTaskManager;
 import com.jby.ride.sharePreference.SharedPreferenceManager;
+import com.jby.ride.splashScreen.SplashScreenActivity;
+import com.jby.ride.wallet.WalletActivity;
+import com.jby.ride.wallet.topUp.TopUpDialog;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,6 +108,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -117,12 +125,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         NoteDialog.NoteDialogCallBack, InvalidTimeDialog.InvalidTimeDialogCallBack,
         DriverFoundDialog.DriverFoundDialogCallBack, PolylineObject.PolyLineCallBack,
         RatingDialog.RatingDialogCallBack, DriverIsOtwDialog.DriverIsOtwDialogCallBack,
-        DriverPickUpDialog.DriverPickUpDialogCallBack, LocationRequestDialog.LocationRequestDialogCallBack {
+        DriverPickUpDialog.DriverPickUpDialogCallBack, LocationRequestDialog.LocationRequestDialogCallBack,
+        AdapterView.OnItemSelectedListener, BalanceNotEnoughDialog.BalanceNotEnoughDialogCallBack,
+        TopUpDialog.TopUpDialogCallBack {
 
     private DrawerLayout mainActivityDrawerLayout;
     private ActionBarDrawerToggle mainActivityActionBarDrawerToggle;
     private NavigationView mainActivityNavigationView;
-    private SquareHeightLinearLayout actionBarMenu;
+    private SquareHeightLinearLayout actionBarMenu, actionBarWallet;
     private TextView mainActivityUsername, mainActivityEmail;
     private CircleImageView mainActivityProfilePicture;
     private LinearLayout mainActivityNavHeaderLayout;
@@ -149,12 +159,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     private ImageView mainActivityDropOffIcon;
     private Button mainActivityBook;
     //    advance booing setting
-    private LinearLayout mainActivityDate, mainActivityTime, mainActivityPayment, mainActivityNote;
+    private LinearLayout mainActivityDate, mainActivityTime, mainActivityNote;
     private LinearLayout mainActivityAdvanceSettingLayout;
     private RelativeLayout mainActivityPriceLayout;
     private TextView mainActivityTextViewDate, mainActivityTextViewTime, mainActivityTextViewPayment;
     private TextView mainActivityTextViewRemark, mainActivityTextViewPrice;
     private TextView mainActivityEstimateDuration, mainActivityEstimateDistance;
+    private Spinner mainActivityPayment;
+    //progress bar
+    private ProgressBar mainActivityProgressBar;
     //    floating button purpose
     private RelativeLayout mainActivityFloatingButtonLayout;
     private ImageView mainActivityFloatingButton;
@@ -174,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     private String note = "-";
     private int hour, minute;
     private boolean selected = false;
+    //payment method purpose
+    private int paymentMethod = 1;
     //    asyncTask
     AsyncTaskManager asyncTaskManager;
     JSONObject jsonObjectLoginResponse;
@@ -204,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         mainActivityActionBarDrawerToggle = new ActionBarDrawerToggle(this, mainActivityDrawerLayout, R.string.activity_main_open, R.string.activity_main_close);
         mainActivityNavigationView = (NavigationView) findViewById(R.id.nv);
         actionBarMenu = (SquareHeightLinearLayout) findViewById(R.id.actionbar_menu);
+        actionBarWallet = findViewById(R.id.actionbar_wallet);
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.activity_main_google_map));
 
         View headerView = mainActivityNavigationView.getHeaderView(0);
@@ -221,14 +237,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
 //        advance booking setting
         mainActivityTime = (LinearLayout) findViewById(R.id.activity_main_time);
         mainActivityDate = (LinearLayout) findViewById(R.id.activity_main_date);
-        mainActivityPayment = (LinearLayout) findViewById(R.id.activity_main_payment);
         mainActivityNote = (LinearLayout) findViewById(R.id.activity_main_remark);
         mainActivityAdvanceSettingLayout = (LinearLayout) findViewById(R.id.activity_main_advance_setting);
         mainActivityPriceLayout = (RelativeLayout) findViewById(R.id.activity_main_price_layout);
+        mainActivityPayment = findViewById(R.id.activity_main_booking_payment_spinner);
+        mainActivityProgressBar = findViewById(R.id.activity_main_progress_bar);
 //        textview
         mainActivityTextViewDate = (TextView) findViewById(R.id.activity_main_date_text_view);
         mainActivityTextViewTime = (TextView) findViewById(R.id.activity_main_time_text_view);
-        mainActivityTextViewPayment = (TextView) findViewById(R.id.activity_main_payment_text_view);
         mainActivityTextViewRemark = (TextView) findViewById(R.id.activity_main_remark_text_view);
         mainActivityTextViewPrice = (TextView) findViewById(R.id.activity_main_price);
         mainActivityEstimateDistance = (TextView) findViewById(R.id.activity_main_estimate_distance);
@@ -250,17 +266,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         mainActivityActionBarDrawerToggle.syncState();
         mainActivityNavigationView.setNavigationItemSelectedListener(this);
 //        actionbar
+        actionBarWallet.setVisibility(View.VISIBLE);
         actionBarMenu.setOnClickListener(this);
+        actionBarWallet.setOnClickListener(this);
 //        booking setting
         mainActivityPickUpPoint.setOnClickListener(this);
         mainActivityDropOffPoint.setOnClickListener(this);
 //      advance setting
         mainActivityTime.setOnClickListener(this);
         mainActivityDate.setOnClickListener(this);
-        mainActivityPayment.setOnClickListener(this);
         mainActivityNote.setOnClickListener(this);
         mainActivityBook.setOnClickListener(this);
         mainActivityFloatingButton.setOnClickListener(this);
+        mainActivityPayment.setOnItemSelectedListener(this);
 //    drawer
         mainActivityNavHeaderLayout.setOnClickListener(this);
 
@@ -291,8 +309,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         checkingDriverFoundStatus();
         checkingBundleValue();
         checkUserProfileGenderAndPhone();
+        setupSpinner();
+//        mainActivityProgressBar.setVisibility(View.GONE);
     }
-
     private void checkingBundleValue() {
         bundle = getIntent().getExtras();
         if(bundle != null){
@@ -322,13 +341,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     private void displaySelectedScreen(int itemId) {
         //creating fragment object
         Fragment fragment = null;
-
+        Intent intent;
         //initializing the fragment object which is selected
         switch (itemId) {
             case R.id.ridePAy:
+                intent = new Intent(this, WalletActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.chat:
+                startActivity(new Intent(this, ChatActivity.class));
                 break;
             case R.id.trip:
-                Intent intent = new Intent(this, RideActivity.class);
+                intent = new Intent(this, RideActivity.class);
                 startActivity(intent);
                 break;
             case R.id.emergency:
@@ -366,10 +390,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                         String email = jsonObjectLoginResponse.getJSONObject("value").getString("email");
                         String profile_picture = jsonObjectLoginResponse.getJSONObject("value").getString("profile_picture");
 
+                        // store user profile picture for chat purpose
+                        SharedPreferenceManager.setUserProfilePic(this, profile_picture);
                         mainActivityEmail.setText(email);
                         mainActivityUsername.setText(username);
 
-                        if (profile_picture != null) {
+                        if (!profile_picture.equals("")) {
                             if(!profile_picture.substring(0, 8).equals("https://"))
                                 profile_picture = ProfileActivity.prefix + profile_picture;
 
@@ -470,6 +496,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                 Intent intent = new Intent(this, RideActivity.class);
                 startActivityForResult(intent, UPDATE_COUNTER_REQUEST);
                 break;
+            case R.id.actionbar_wallet:
+                startActivity(new Intent(this, WalletActivity.class));
+                break;
         }
     }
 
@@ -540,7 +569,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(16));
         Log.d(TAG, "Location: " + location);
-
 //        assign value into current location then only add the marker
         currentLocation = latLng;
         fetchAddress();
@@ -606,22 +634,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
             if (resultData == null) {
+
                 return;
             }
-
-            // Display the address string
-            // or an error message sent from the intent service.
-
+            //getting data from addressIntent service
             ArrayList<AddressObject> addressList;
             addressList = resultData.getParcelableArrayList(LocationConstants.RESULT_DATA_KEY);
-            if (addressList == null) {
-                addressList = null;
-            }
             // Show a toast message if an address was found.
             if (resultCode == LocationConstants.SUCCESS_RESULT) {
-                Log.i(TAG, "MainActivity" + getString(R.string.activity_main_address_found));
-                if(addressList!= null)
+                Log.i(TAG, "MainActivity: " + getString(R.string.activity_main_address_found));
+                if(addressList.size() > 0){
                     setInitialPickUpPoint(addressList);
+                }
+                else{
+                    showSnackBar("Unable to get your exact location :(");
+                    mainActivityProgressBar.setVisibility(View.GONE);
+                }
+
+
             }
 
         }
@@ -638,6 +668,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         routeMarker.title(routeArray.get(0).getLocationName());
         routeMarker.icon(BitmapDescriptorFactory.fromBitmap(new CustomMarker(this).getMarkerBitmapFromView(R.drawable.activity_main_startpoint)));
         googleMap.addMarker(routeMarker);
+
+        mainActivityProgressBar.setVisibility(View.GONE);
     }
 //    place picker && reset final fare = 4.00
     private void selectPoint(int point){
@@ -777,7 +809,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
             String time_format = "%02d:%02d";
             String hourStatus = setAmOrPm(hour);
 
-            time = String.format(Locale.getDefault(),time_format, hour, minute) +" "+hourStatus;
+            time = String.format(Locale.getDefault(),time_format, hour, minute + 10) +" "+hourStatus;
             date = dayOfMonth + "/" + month;
 
             mainActivityDropOffIcon.setImageDrawable(getDrawable(R.drawable.activity_main_endpoint));
@@ -920,10 +952,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         timePicker.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-
                 SimpleDateFormat sdf = new SimpleDateFormat("HHmm", Locale.getDefault());
-                int currentTime = Integer.valueOf(sdf.format(new Date()));
-                int selectTime = Integer.valueOf(String.valueOf(hour) + String.valueOf( minute));
+                double currentTime = Double.valueOf(sdf.format(new Date()));
+                double selectTime;
+                if(minute == 0)
+                    selectTime = Double.valueOf(String.valueOf(hour) + "00");
+                else
+                    selectTime = Double.valueOf(String.valueOf(hour) + String.valueOf(minute));
+
 
                 if(selectTime - currentTime < 10 && selected){
                     dialogFragment = new InvalidTimeDialog();
@@ -955,6 +991,135 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
     }
     //<-----------------------------------end of time setting-------------------------------------------------------->
 
+    /*-------------------------------------------------------------------payment method setting---------------------------------------------*/
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if(i == 0)
+            paymentMethod = 1;
+        else{
+            //open progress bar
+            mainActivityProgressBar.setVisibility(View.VISIBLE);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getCurrentBalance();
+                }
+            },200);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    private void setupSpinner() {
+        List<String> categories = new ArrayList<>();
+        categories.add("Cash");
+        categories.add("RidePay");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.activity_main_spinner_layout, categories);
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        mainActivityPayment.setAdapter(dataAdapter);
+    }
+
+    private void getCurrentBalance(){
+        apiDataObjectArrayList = new ArrayList<>();
+        apiDataObjectArrayList.add(new ApiDataObject("user_id", SharedPreferenceManager.getUserID(this)));
+        apiDataObjectArrayList.add(new ApiDataObject("balance","1"));
+
+        asyncTaskManager = new AsyncTaskManager(
+                this,
+                new ApiManager().transaction,
+                new ApiManager().getResultParameter(
+                        "",
+                        new ApiManager().setData(apiDataObjectArrayList),
+                        ""
+                )
+        );
+        asyncTaskManager.execute();
+
+        if (!asyncTaskManager.isCancelled()) {
+            try {
+                jsonObjectLoginResponse = asyncTaskManager.get(30000, TimeUnit.MILLISECONDS);
+
+                if (jsonObjectLoginResponse != null) {
+                    if(jsonObjectLoginResponse.getString("status").equals("1")){
+                        String currentBalance = jsonObjectLoginResponse.getJSONObject("balance").getString("balance");
+                        checkingBalance(currentBalance);
+                    }
+                    else if(jsonObjectLoginResponse.getString("status").equals("2")){
+                        showSnackBar("Something Went Wrong!");
+                    }
+                }
+                else {
+                    Toast.makeText(this, "Network Error!", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (InterruptedException e) {
+                Toast.makeText(this, "Interrupted Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                Toast.makeText(this, "Execution Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Toast.makeText(this, "JSON Exception!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            } catch (TimeoutException e) {
+                Toast.makeText(this, "Connection Time Out!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+        mainActivityProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void checkingBalance(String currentBalance){
+        if(currentBalance.equals("null"))
+            currentBalance = "0";
+
+        double balance = Double.valueOf(currentBalance);
+        if(balance >= finalFare)
+            paymentMethod = 2;
+        else
+            openBalanceNotEnoughDialog();
+    }
+
+    @Override
+    public void getCurrentBalanceSetup() {
+
+    }
+
+    @Override
+    public void setCashAsPayment() {
+        mainActivityPayment.setSelection(0);
+    }
+
+    @Override
+    public void topUp() {
+        dialogFragment = new TopUpDialog();
+        bundle = new Bundle();
+        bundle.putBoolean("fromMainActivity", true);
+
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(fm , "");
+    }
+
+    private void openBalanceNotEnoughDialog(){
+        dialogFragment = new BalanceNotEnoughDialog();
+        dialogFragment.show(fm, "");
+    }
+
+    public void closeKeyBoard(){
+        final InputMethodManager imm = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null)
+            imm.hideSoftInputFromWindow(mainActivityMainLayout.getWindowToken(), 0);
+    }
+
     //<-----------------------------------booking setting-------------------------------------------------------->
     private void createUserRide(){
         DecimalFormat form = new DecimalFormat("0");
@@ -971,7 +1136,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
         apiDataObjectArrayList.add(new ApiDataObject("drop_off_location",dropOffLocation));
         apiDataObjectArrayList.add(new ApiDataObject("pick_up_address", pickUpAddress));
         apiDataObjectArrayList.add(new ApiDataObject("drop_off_address",dropOffAddress));
-        apiDataObjectArrayList.add(new ApiDataObject("payment_method", "1"));
+        apiDataObjectArrayList.add(new ApiDataObject("payment_method", String.valueOf(paymentMethod)));
         apiDataObjectArrayList.add(new ApiDataObject("dateRide", date));
         apiDataObjectArrayList.add(new ApiDataObject("time", time));
         apiDataObjectArrayList.add(new ApiDataObject("note", note));
@@ -1116,7 +1281,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
 
     private void logOut(){
         SharedPreferenceManager.setUserID(this, "default");
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+
+        bundle = new Bundle();
+        bundle.putBoolean("sign_out", true);
+
+        intent.putExtras(bundle);
         startActivity(intent);
         finish();
     }
@@ -1234,6 +1404,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.
                     //driver found
                 case "4":
                     matchRideId = intent.getStringExtra("match_ride_id");
+                    Log.d("haha","haha: driver is found" + matchRideId);
                     popOutDriverFoundDialog(matchRideId);
                     break;
                     //otw

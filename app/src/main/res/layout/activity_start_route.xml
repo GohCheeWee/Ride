@@ -16,6 +16,7 @@
         android:singleLine="true"
         android:visibility="gone"
         android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
         android:textColor="@color/white"
         android:background="@color/green"
         android:fontFamily="@string/font_family_condensed"
@@ -115,12 +116,14 @@
                 android:src="@drawable/activity_start_route_call_icon"
                 android:id="@+id/activity_start_route_call_icon"
                 android:padding="3dp"
+                android:contentDescription="@string/app_name"
                 android:layout_toStartOf="@id/activity_start_route_message_icon"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="3dp"
+                android:contentDescription="@string/app_name"
                 android:src="@drawable/activity_start_route_message_icon"
                 android:id="@+id/activity_start_route_message_icon"
                 android:layout_alignParentEnd="true" />

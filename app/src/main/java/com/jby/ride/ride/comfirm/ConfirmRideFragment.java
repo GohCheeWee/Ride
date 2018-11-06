@@ -301,6 +301,7 @@ public class ConfirmRideFragment extends Fragment implements SwipeRefreshLayout.
         this.position = position;
 
         bundle.putString("match_ride_id", confirmRideObjectArrayList.get(position).getId());
+        bundle.putString("driver_ride_id", confirmRideObjectArrayList.get(position).getDriver_ride_id());
         intent.putExtras(bundle);
         startActivityForResult(intent, UPDATE_CONFIRMED_RIDE_REQUEST);
     }

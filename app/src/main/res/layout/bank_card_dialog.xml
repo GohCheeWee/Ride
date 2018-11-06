@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:id="@+id/set_default_bank_card_dialog_parent_layout"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_height="?actionBarSize"
+        android:id="@+id/actionbar"
+        android:layout_width="match_parent"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bank_card_dialog_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTintMode="src_in"
+        android:indeterminateTint="@color/red"
+        android:layout_centerInParent="true"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/actionbar"
+        android:padding="10dp"
+        android:layout_marginBottom="?actionBarSize"
+        android:id="@+id/bank_card_dialog_swipe_layout">
+
+        <com.jby.ride.others.CustomListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerHeight="5dp"
+            android:focusable="true"
+            android:divider="@color/white"
+            android:scrollbars="none"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/bank_card_dialog_add_card_button"
+            android:id="@+id/bank_card_dialog_list_view"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:padding="10dp"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:focusable="false"
+            android:visibility="gone"
+            android:id="@+id/bank_card_dialog_not_found_layout"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_above="@id/bank_card_dialog_label_not_found"
+                android:contentDescription="@string/fragment_confirm_ride_label_no_upcoming_trip"
+                android:padding="30dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/bank_card_dialog_not_found_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:textSize="25sp"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="200dp"
+                android:fontFamily="sans-serif-condensed"
+                android:id="@+id/bank_card_dialog_label_not_found"
+                android:text="@string/bank_card_dialog_label_not_found"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/bank_card_dialog_add_card_button"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:text="@string/bank_card_dialog_label_add_bank_card"
+            android:elevation="10dp"
+            android:background="@drawable/activity_login_custom_button" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

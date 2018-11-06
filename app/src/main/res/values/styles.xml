@@ -33,4 +33,21 @@
         <item name="android:windowExitAnimation">@anim/fade_out_fast</item>
     </style>
 
+    <style name="bank_card_dialog_custom_edit_text" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@color/disable_color</item>
+        <item name="colorControlActivated">@color/red</item>
+        <item name="colorControlHighlight">@color/red</item>
+    </style>
+
+    <style name="bank_card_dialog_custom_switch_compat" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/red</item>    <!-- set your color -->
+    </style>
+
+    <style name="bank_card_dialog_custom_text_input_layout">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

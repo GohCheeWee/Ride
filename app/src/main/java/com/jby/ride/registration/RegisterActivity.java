@@ -228,8 +228,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 //    intent setting
     private void backTologinActivity(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        onBackPressed();
     }
 
 //    hide keyboard

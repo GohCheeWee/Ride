@@ -48,7 +48,6 @@ public class FetchAddressIntentService extends IntentService {
         // Get the location passed to this service through an extra.
         Location location = intent.getParcelableExtra(
                 LocationConstants.LOCATION_DATA_EXTRA);
-
         // ...
 
         List<Address> addresses = null;
@@ -63,6 +62,8 @@ public class FetchAddressIntentService extends IntentService {
             // Catch network or other I/O problems.
             errorMessage = getString(R.string.activity_main_service_not_found);
             Log.e(TAG, errorMessage, ioException);
+            //deliverFailedResult
+            deliverResultToReceiver(LocationConstants.SUCCESS_RESULT, addressFragments);
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
             errorMessage = getString(R.string.activity_main_invalid_position);
@@ -78,7 +79,6 @@ public class FetchAddressIntentService extends IntentService {
                 errorMessage = getString(R.string.activity_main_address_not_found);
                 Log.e(TAG, errorMessage);
             }
-            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
         } else {
             Address address = addresses.get(0);
 
@@ -92,4 +92,5 @@ public class FetchAddressIntentService extends IntentService {
                    addressFragments);
         }
     }
+
 }

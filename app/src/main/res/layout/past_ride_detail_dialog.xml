@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ride.RideActivity">
+
+    <include
+        layout="@layout/actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:background="@color/transparent_black"
+        android:id="@+id/past_ride_detail_dialog_booking_num_layout"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:fontFamily="@string/font_family_condensed"
+            android:textSize="18sp"
+            android:text="@string/activity_past_ride_detail_label_booking_number"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:fontFamily="@string/font_family_condensed"
+            android:textSize="18sp"
+            android:id="@+id/activity_past_ride_detail_booking_no"
+            android:text="@string/activity_past_ride_detail_label_booking_number"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/activity_pass_ride_detail_scroll_view"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="10dp"
+                android:layout_weight="2">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/user_profile_dialog_user_icon"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/activity_past_ride_detail_driver_profile_picture"
+                    android:padding="5dp"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="22sp"
+                    android:id="@+id/activity_past_ride_detail_driver_car_plate"
+                    android:text="@string/activity_past_ride_detail_label_booking_number"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="18sp"
+                    android:id="@+id/activity_past_ride_detail_driver_name"
+                    android:text="@string/activity_past_ride_detail_label_booking_number"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:padding="10dp"
+                android:background="@color/background_color"
+                android:gravity="center_vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="18sp"
+                    android:id="@+id/activity_past_ride_detail_label_price"
+                    android:text="@string/activity_past_ride_detail_label_fare"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="18sp"
+                    android:layout_toEndOf="@id/activity_past_ride_detail_label_price"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/activity_past_ride_detail_fare"
+                    android:text="@string/activity_past_ride_detail_label_fare"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:textStyle="bold"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="14sp"
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/activity_past_ride_detail_payment_method"
+                    android:text="@string/activity_past_ride_detail_payment_method"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/activity_main_startpoint"
+                    android:padding="10dp"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="30/04/2018 12:50pm"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:padding="5dp"
+                    android:id="@+id/activity_past_ride_detail_pick_up_point"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:contentDescription="@string/app_name"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/fragment_past_ride_dot_icon"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/activity_main_endpoint"
+                    android:padding="10dp"
+                    android:contentDescription="@string/app_name" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="30/04/2018 12:50pm"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:padding="5dp"
+                    android:id="@+id/activity_past_ride_detail_drop_off_point"
+                    android:gravity="center_vertical"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="10dp"
+                android:background="@color/background_color">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="20sp"
+                    android:padding="5dp"
+                    android:id="@+id/activity_past_ride_detail_label_rating"
+                    android:text="@string/activity_past_ride_detail_label_rating"/>
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:layout_width="wrap_content"
+                    android:numStars="5"
+                    android:stepSize="1.0"
+                    android:isIndicator="true"
+                    android:progressTint="@color/red"
+                    android:id="@+id/activity_past_ride_detail_rating"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/activity_past_ride_detail_rating_status"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:gravity="center"
+                    android:textColor="@color/grey"
+                    android:textStyle="bold|italic"
+                    android:text="Great!"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/line_black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="10dp"
+                android:background="@color/background_color">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textSize="20sp"
+                    android:padding="5dp"
+                    android:id="@+id/activity_past_ride_detail_label_comment"
+                    android:text="@string/activity_past_ride_detail_label_comment"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:maxHeight="70dp"
+                    android:textSize="13sp"
+                    android:padding="5dp"
+                    android:gravity="start"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:textColor="@color/custom_edittext_text_color"
+                    android:text="@string/past_ride_detail_dialog_hint_comment"
+                    android:inputType="textImeMultiLine"
+                    android:id="@+id/activity_past_ride_detail_comment"
+                    android:background="@drawable/rating_dialog_custom_edit_text"
+                    android:hint="@string/rating_dialog_hint_comment" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/activity_past_ride_detail_progress_bar"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateTintMode="src_in"
+        android:visibility="visible"
+        android:indeterminateTint="@color/red" />
+
+</LinearLayout>
